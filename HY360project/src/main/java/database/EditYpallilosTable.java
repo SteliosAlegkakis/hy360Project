@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 
 public class EditYpallilosTable {
@@ -22,12 +24,12 @@ public class EditYpallilosTable {
         return ypallilos;
     }
 
-    public static Ypallilos ypallilosFromJs(HttpServletRequest request){
+    public static Ypallilos ypallilosFromJs(HttpServletRequest request) throws Exception {
         Ypallilos ypallilos = new Ypallilos();
         ypallilos.setName(request.getParameter("name"));
         ypallilos.setAddress(request.getParameter("address"));
         ypallilos.setPhone(request.getParameter("phone"));
-        ypallilos.setStartDate(request.getParameter("start_date"));
+        ypallilos.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("start_date")));
         ypallilos.setIBAN(request.getParameter("IBAN"));
         ypallilos.setBank(request.getParameter("bank"));
         ypallilos.setCategory(request.getParameter("category"));
@@ -49,7 +51,7 @@ public class EditYpallilosTable {
                     + "'" + ypallilos.getName() + "',"
                     + "'" + ypallilos.getAddress() + "',"
                     + "'" + ypallilos.getPhone() + "',"
-                    + "'" + ypallilos.getStartDate() + "',"
+                    + "'" + new java.sql.Date((ypallilos.getStartDate().getTime())) + "',"
                     + "'" + ypallilos.getIBAN() + "',"
                     + "'" + ypallilos.getBank() + "',"
                     + "'" + ypallilos.getCategory() + "',"
@@ -58,15 +60,21 @@ public class EditYpallilosTable {
                     + "'" + ypallilos.getChildrenNum() + "',"
                     + "'" + ypallilos.getChildrenAges() + "'"
                     + ")";
+            //stmt.execute(table);
 
             stmt.executeUpdate(insertQuery);
-            System.out.println("#Ypallilos was successfully added in the database.");
-            stmt.close();
+            System.out.println("# The borrowing was successfully added in the database.");
 
+//            /* Get the member id from the database and set it to the member */
+//            stmt.close();
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
         }
-        catch (SQLException ex) {System.err.println("SQl exception in createNewYpallilos");}
-        catch (ClassNotFoundException e) {System.err.println(("ClassNotFoundException in createNewYpallilos"));}
     }
+//        catch (SQLException ex) {System.err.println("SQl exception in createNewYpallilos");}
+//        catch (ClassNotFoundException e) {System.err.println(("ClassNotFoundException in createNewYpallilos"));}
+//    }
 
     public static String databaseYpallilosToJSON(String name) {
 

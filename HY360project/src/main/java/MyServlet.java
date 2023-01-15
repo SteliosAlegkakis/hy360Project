@@ -33,7 +33,13 @@ public class MyServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String request_type = request.getParameter("request");
         if(request_type.equals("change_salaries")) changeSalaries();
-        else if(request_type.equals("hire")) {hire(request,response);}
+        else if(request_type.equals("hire")) {
+            try {
+                hire(request,response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         else if(request_type.equals("contract")) contract();
         else if(request_type.equals("update_employee")) updateEmployee();
         else if(request_type.equals("fire")) fire();
@@ -44,7 +50,7 @@ public class MyServlet extends HttpServlet {
         }
     }
 
-    private void hire(HttpServletRequest request, HttpServletResponse response) {
+    private void hire(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         System.out.println("hire");
 
