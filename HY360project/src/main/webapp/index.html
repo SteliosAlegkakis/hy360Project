@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>HY360 Project</title>
+</head>
+<script src="app.js"></script>
+<body>
+    <div id="nav_bar">
+        <h4 class="menu_item" onclick="viewMenu()">Μενού</h4>
+        <h2 id="title">Τμήμα Μισθοδωσίας Πανεπιστημίου Κρήτης</h2>
+    </div>
+    <div id="main">
+        <div id="menu">
+            <h4 class="menu_item" onclick="viewForm('hire')">Πρόσληψη</h4>
+            <h4 class="menu_item"onclick="viewForm('contract')">Σύμβαση</h4>
+            <h4 class="menu_item" onclick="viewForm('update')">Αλλαγή Στοιχείων Υπαλλήλου</h4>
+            <h4 class="menu_item" onclick="viewForm('change_salaries')">Μεταβολή Μισθών/Επιδωμάτων</h4>
+            <h4 class="menu_item" onclick="viewForm('fire_retire')">Απόλυση/Συνταξιοδώτηση</h4>
+            <h4 class="menu_item" onclick="viewForm('payroll')">Καταβολή Μισθοδωσίας</h4>
+            <h4 class="menu_item" onclick="viewForm('queries')">Ερωτήσεις</h4>
+        </div>
+        <div id="forms" onsubmit="return false">
+            <form id="hire" style="display: none;">
+                <h2>Πρόσληψη Υπαλλήλου</h2>
+                <div class="row">
+                    <input name="name" type="text" name="name" placeholder="Όνομα">
+                    <input type="text" name="address" placeholder="Διέυθυνση">
+                </div>
+                <div class="row">
+                    <input type="text" name="phone" placeholder="Τηλέφωνο">
+                    <input type="date" name="start_date" placeholder="Ημερομηνια">
+                </div>
+                <div class="row">
+                    <input type="text" name="IBAN" placeholder="IBAN">
+                    <input type="text" name="bank" placeholder="Όνομα Τράπεζας">
+                </div>
+                <div class="row">
+                    <input type="text" name="dept" placeholder="Τμήμα Εργασίας">
+                </div>
+                <div class="radio">
+                    <h4 class="radio-title button" onclick="viewElement('permanent_staff_category',this,'Κατηγορία Προσωπικού')">Κατηγορία Προσωπικού ˅</h4>
+                    <div class="radio-input" id="permanent_staff_category" style="display: none;">
+                        <div class="radio-element">
+                            <label>Μόνιμο Διδακτικό Προσωπικό</label>
+                            <input type="radio" name="category" value="monimo_didaktiko" required>
+                        </div>
+
+                        <div class="radio-element">
+                            <label>Μόνιμο Διοικιτικό Προσωπικό</label>
+                            <input type="radio" name="category" value="monimo_dioikitiko" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="radio">
+                    <h4 class="radio-title button" onclick="viewElement('marriage_permanent',this,'Κατάσταση Γάμου')">Κατάσταση Γάμου ˅</h4>
+                    <div class="radio-input" id="marriage_permanent" style="display: none">
+                        <div class="radio-element">
+                            <label>Ένγαμος</label>
+                            <input type="radio" name="marital_status" value="married" required>
+                        </div>
+        
+                        <div class="radio-element">
+                            <label>Άγαμος</label>
+                            <input type="radio" name="marital_status" value="unmarried" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <input type="text" name="children_num" placeholder="Αριθμός Παιδιών">
+                    <input type="text" name="children_ages" placeholder="Ηλικίες Παιδίων">
+                </div>
+                <button class="submit" onclick="server_request('hire','POST','hire')">Υποβολή</button>
+            </form>
+
+            <form id="contract" style="display: none;">
+                <h2>Σύμβαση</h2>
+                <div class="row">
+                    <input name="name" type="text" name="name" placeholder="Όνομα">
+                    <input type="text" name="address" placeholder="Διέυθυνση">
+                </div>
+                <div class="row">
+                    <input type="text" name="phone_number" placeholder="Τηλέφωνο">
+                    <input type="date" name="date" placeholder="Ημερομηνια">
+                </div>
+                <div class="row">
+                    <input type="text" name="IBAN" placeholder="IBAN">
+                    <input type="text" name="bank" placeholder="Όνομα Τράπεζας">
+                </div>
+                <div class="row">
+                    <input type="text" name="department" placeholder="Τμήμα Εργασίας">
+                </div>
+                <div class="radio">
+                    <h4 class="radio-title button" onclick="viewElement('contract_staff_category',this,'Κατηγορία Προσωπικού')">Κατηγορία Προσωπικού ˅</h4>
+                    <div class="radio-input" id="contract_staff_category" style="display: none">
+                        <div class="radio-element">
+                            <label>Συμβασιούχο Διδακτικό Προσωπικό</label>
+                            <input type="radio" name="staff-category" value="monimo didaktiko proswpiko" required>
+                        </div>
+
+                        <div class="radio-element">
+                            <label>Συμβασιούχο Διοικιτικό Προσωπικό</label>
+                            <input type="radio" name="staff-category" value="monimo dioikitiko proswpiko" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="radio">
+                    <h4 class="radio-title button" onclick="viewElement('contract_marriage',this,'Κατάσταση Γάμου')">Κατάσταση Γάμου ˅</h4>
+                    <div class="radio-input" id="contract_marriage" style="display: none;">
+                        <div class="radio-element">
+                            <label>Ένγαμος</label>
+                            <input type="radio" name="marital_status" value="married" required>
+                        </div>
+
+                        <div class="radio-element">
+                            <label>Άγαμος</label>
+                            <input type="radio" name="marital_status" value="unmarried" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <input type="text" placeholder="Αριθμός Παιδιών">
+                    <input type="text" placeholder="Ηλικίες Παιδίων">
+                </div>
+                <button class="submit">Υποβολή</button>
+            </form>
+    
+            <form id="update" style="display: none;">
+                <h2>Αλλαγή Στοιχείων Υπαλλήλων</h2>
+                <div class="row">
+                    <input type="text" name="name" placeholder="Όνομα">
+                    <input type="text" name="address" placeholder="Διεύθυνση">
+                </div>
+                <div class="row">
+                    <input type="text" name="phone_number" placeholder="Τηλέφωνο">
+                    <input type="date" name="date" placeholder="Ημερομηνία">
+                </div>
+                <div class="row">
+                    <input type="text" name="IBAN" placeholder="IBAN">
+                    <input type="text" name="bank" placeholder="Όνομα Τράπεζας">
+                </div>
+                <div class="row">
+                    <input type="text" name="department" placeholder="Τμήμα Εργασίας">
+                </div>
+                <div class="radio">
+                    <h4 class="radio-title button" onclick="viewElement('update_marriage',this,'Κατάσταση Γάμου')">Κατάσταση Γαμου ˅</h4>
+                    <div class="radio-input" id="update_marriage" style="display: none">
+                        <div class="radio-element">
+                            <label>Ένγαμος</label>
+                            <input type="radio" name="marital_status" value="married" required>
+                        </div>
+        
+                        <div class="radio-element">
+                            <label>Άγαμος</label>
+                            <input type="radio" name="marital_status" value="unmarried" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <input type="text" placeholder="Αριθμός Παιδιών">
+                    <input type="text" placeholder="Ηλικίες Παιδιών">
+                </div>
+                <button class="submit">Υποβολή</button>
+            </form>
+
+            <form id="change_salaries" style="display: none" onsubmit="return false">
+               <div class="radio">
+                   <h4 class="radio-title button" onclick="viewElement('emploee_type',this,'Κατηγορία Υπαλλήλων')">Κατηγορία Υπαλλήλων ˅</h4>
+                   <div class="radio-input" id="emploee_type" style="display: none">
+                       <div class="radio-element">
+                           <label>Μόνιμο Διοικιτικό Προσωπικό</label>
+                           <input type="checkbox" name="per_1" value="monimo_dioikitiko_proswpiko">
+                       </div>
+                       <div class="radio-element">
+                           <label>Μόνιμο Διδακτικό Προσωπικό</label>
+                           <input type="checkbox" name="per_2" value="monimo_didaktiko proswpiko">
+                       </div>
+                       <div class="radio-element">
+                           <label>Συμβασιούχο Διδακτικό Προσωπικό</label>
+                           <input type="checkbox" name="simv_1" value="symvasioyxo_didaktiko proswpiko">
+                       </div>
+                       <div class="radio-element">
+                           <label>Συμβασιούχο Διδακτικό Προσωπικό</label>
+                           <input type="checkbox" name="simv_2" value="symvasioyxo_didaktiko proswpiko">
+                       </div>
+                   </div>
+
+                   <h4 class="radio-title button" onclick="viewElement('salary_allowance',this,'Μισθοί/επιδώματα')">Μισθοί/Επιδώματα ˅</h4>
+                   <div class="radio-input" id="salary_allowance" style="display: none">
+                        <div class="radio-element">
+                            <label>Μισθοί</label>
+                            <input type="checkbox" name="misthoi" value="misthos">
+                        </div>
+                        <div class="radio-element">
+                           <label>Επιδώματα</label>
+                            <input type="checkbox" name="epidoma" value="epidoma">
+                        </div>
+                   </div>
+               </div>
+
+                <input type="text" name="amount" placeholder="Ποσό Άυξησης">
+
+                <button class="submit">Υποβολή</button>
+            </form>
+
+        </div>
+    </div>
+</body>
