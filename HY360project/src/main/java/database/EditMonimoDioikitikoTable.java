@@ -15,7 +15,9 @@ public class EditMonimoDioikitikoTable {
         return monimo_dioikitiko;
     }
 
-    public static void createNewMonimoDioikitiko(Monimo_dioikitiko monimo_dioikitiko) {
+    /* The SQLException should be handled by the servlet to inform the front end that something went wrong
+    * */
+    public static void createNewMonimoDioikitiko(Monimo_dioikitiko monimo_dioikitiko) throws SQLException {
         try {
             Connection con = DB_Connection.getConnection();
             Statement stmt = con.createStatement();
@@ -34,11 +36,12 @@ public class EditMonimoDioikitikoTable {
             stmt.close();
 
         }
-        catch (SQLException e) {System.err.println("SQl exception in createNewMonimoDioikitiko");}
         catch (ClassNotFoundException e) {System.err.println("ClassNotFoundException in createNewMonimoDioikitiko");}
     }
 
-    public static String databaseMonimoDioikitikoToJSON(int perm_id) {
+    /* The SQLException should be handled by the servlet to inform the front end that something went wrong
+     * */
+    public static String databaseMonimoDioikitikoToJSON(int perm_id) throws SQLException {
 
         try {
             ResultSet rs;
@@ -50,13 +53,14 @@ public class EditMonimoDioikitikoTable {
             String json=DB_Connection.getResultsToJSON(rs);
             return json;
         }
-        catch (SQLException e) {System.err.println("SQLException at databseMonimoDioikitikoToJSON");}
         catch (ClassNotFoundException e) {System.err.println("ClassNotFoundException at databseMonimoDioikitikoToJSON");}
 
         return null;
     }
 
-    public static Monimo_dioikitiko monimoDioikitikoFromDatabase(int perm_id){
+    /* The SQLException should be handled by the servlet to inform the front end that something went wrong
+     * */
+    public static Monimo_dioikitiko monimoDioikitikoFromDatabase(int perm_id) throws SQLException {
         return jsonToMonimoDioikitiko(databaseMonimoDioikitikoToJSON(perm_id));
     }
 }

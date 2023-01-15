@@ -1,8 +1,6 @@
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,53 +46,29 @@ public class MyServlet extends HttpServlet {
 
         System.out.println("hire");
 
-        Ypallilos ypallilos = EditYpallilosTable.ypallilosFromJs(request);
-        EditYpallilosTable.createNewYpallilos(ypallilos);
+        try{
+            Ypallilos ypallilos = EditYpallilosTable.ypallilosFromJs(request);
+            EditYpallilosTable.createNewYpallilos(ypallilos);
 
-        String name = ypallilos.getName();
-        ypallilos = EditYpallilosTable.jsonToYpallilos(EditYpallilosTable.databaseYpallilosToJSON(name));
+            String name = ypallilos.getName();
+            ypallilos = EditYpallilosTable.jsonToYpallilos(EditYpallilosTable.databaseYpallilosToJSON(name));
 
-        double salary = 0,family_allowance = 0;
-        int emp_id = ypallilos.getEmpID();
 
-        if(ypallilos.getCategory().equals("monimo_didaktiko")) {
-            salary = 1200;
-            double research_allowance = 200;
-            if(ypallilos.getMaritalStatus().equals("married"))
-                family_allowance = familyAllowance(ypallilos.getChildrenAges(),ypallilos.getChildrenNum(),salary);
-            //TODO: 14/01/2023 make an entry at monimo_didaktiko table
-            Monimo_didaktiko monimo_didaktiko = new Monimo_didaktiko(emp_id,0,salary,family_allowance,research_allowance);
-            EditMonimoDidaktikoTable.createNewMonimoDidaktiko(monimo_didaktiko);
+            if(ypallilos.getCategory().equals("monimo_didaktiko")) {
+                Monimo_didaktiko md = new Monimo_didaktiko(ypallilos.getEmpID(), ypallilos.getStartDate(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),ypallilos.getMaritalStatus());
+                EditMonimoDidaktikoTable.createNewMonimoDidaktiko(md);
+            }
+            else if(ypallilos.getCategory().equals("monimo_dioikitiko")){
+                Monimo_dioikitiko md = new Monimo_dioikitiko(ypallilos.getEmpID(), ypallilos.getStartDate(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),ypallilos.getMaritalStatus());
+                EditMonimoDioikitikoTable.createNewMonimoDioikitiko(md);
+            }
+
+            response.setStatus(200);
         }
-        else if(ypallilos.getCategory().equals("monimo_dioikitiko")){
-            salary = 1500;
-            if(ypallilos.getMaritalStatus().equals("married"))
-                family_allowance = familyAllowance(ypallilos.getChildrenAges(),ypallilos.getChildrenNum(),salary);
-            // TODO: 14/01/2023 make an entry at monimo_dioikitiko
-            Monimo_dioikitiko monimo_dioikitiko = new Monimo_dioikitiko(emp_id,0,salary,family_allowance);
-            EditMonimoDioikitikoTable.createNewMonimoDioikitiko(monimo_dioikitiko);
+        catch (SQLException e) {
+            System.err.println("SQLException at hire() in servlet");
+            response.setStatus(500);
         }
-        System.out.println("Employee id:"+emp_id);
-        System.out.println("Salary: "+salary);
-        System.out.println("family allowance: "+family_allowance);
-
-        response.setStatus(200);
-    }
-
-    private double familyAllowance(String children_ages,int childrenNum,double salary){
-        List<String> ages = new ArrayList<>();
-        double family_allowance = salary * 0.05;
-        StringTokenizer tokenizer = new StringTokenizer(children_ages," ");
-
-        while(tokenizer.hasMoreElements()) ages.add(tokenizer.nextToken());
-
-        if(ages.size()>childrenNum||ages.size()<childrenNum) return family_allowance;
-
-        for(int i=0;i<ages.size();i++){
-            if(Integer.parseInt(ages.get(i))<18) family_allowance += salary*0.05;
-        }
-
-        return family_allowance;
     }
 
     private void contract(){

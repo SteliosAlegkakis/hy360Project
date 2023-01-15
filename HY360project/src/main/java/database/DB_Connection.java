@@ -1,11 +1,8 @@
 package database;
 
 import com.google.gson.JsonObject;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+
+import java.sql.*;
 
 public class DB_Connection {
     
@@ -74,5 +71,23 @@ public class DB_Connection {
             object.addProperty(name,value);
         }
         return object;
+    }
+
+    public static void closeDBConnection(Statement statement, Connection connection) {
+        // Close connection
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException ex) {
+//                Logger.getLogger(PostDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if( connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+//                Logger.getLogger(PostDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }

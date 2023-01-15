@@ -6,6 +6,8 @@ function viewMenu(){
 
 function viewForm(form_name){
     let form = document.getElementById(form_name);
+    document.getElementById(form_name+"_success").style.display = 'none';
+    document.getElementById(form_name+"_fail").style.display = 'none';
     if(form.style.display === 'flex') form.style.display = 'none'
     else {
         let forms = document.getElementsByTagName("form");
@@ -35,33 +37,15 @@ function server_request(form_name,method,request){
     console.log(data);
     let xml_request = new XMLHttpRequest();
     xml_request.onload = function (){
-        if(xml_request.readyState === 4 && xml_request.status === 200)
-            console.log('Submitted successfully')
-        else if(xml_request.status != 200)
-            console.log('Server responded with error : '+xml_request.status)
+        if(xml_request.readyState === 4 && xml_request.status === 200) {
+            document.getElementById(form_name + "_success").style.display = 'flex';
+            document.getElementById(form_name).style.display = 'none';
+        }
+        else if(xml_request.status != 200) {
+            document.getElementById(form_name + "_fail").style.display = 'block';
+        }
     }
     xml_request.open(method, 'MyServlet?'+data);
     xml_request.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     xml_request.send(data);
 }
-
-/*function serverPost(form_name,request){
-    let myForm = document.getElementById(form_name);
-    let formData = new FormData(myForm);
-    let xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log("Success");
-        }
-        else if(xhr.status!=200){
-            console.log("Error");
-        }
-    }
-    const json = {};
-    formData.forEach((value, key) => (json[key] = value));
-    console.log(json);
-    xhr.open('POST','MyServlet?request='+request);
-    xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-    xhr.send(JSON.stringify(json));
-    console.log(JSON.stringify(json));
-}*/

@@ -16,7 +16,9 @@ public class EditMonimoDidaktikoTable {
         return monimo_didaktiko;
     }
 
-    public static void createNewMonimoDidaktiko(Monimo_didaktiko monimo_didaktiko) {
+    /* The SQLException should be handled by the servlet to inform the front end that something went wrong
+     * */
+    public static void createNewMonimoDidaktiko(Monimo_didaktiko monimo_didaktiko) throws SQLException {
         try {
             Connection con = DB_Connection.getConnection();
             Statement stmt = con.createStatement();
@@ -27,19 +29,20 @@ public class EditMonimoDidaktikoTable {
                     + "'" + monimo_didaktiko.getPermId() + "',"
                     + "'" + monimo_didaktiko.getYears() + "',"
                     + "'" + monimo_didaktiko.getSalary() + "',"
-                    + "'" + monimo_didaktiko.getFamily_allowance() + "',"
-                    + "'" + monimo_didaktiko.getResearch_allowance() + "'"
+                    + "'" + monimo_didaktiko.getFamilyAllowance() + "',"
+                    + "'" + monimo_didaktiko.getResearchAllowance() + "'"
                     + ")";
 
             stmt.executeUpdate(insertQuery);
             System.out.println("#monimo_didaktiko was successfully added in the database.");
             stmt.close();
         }
-        catch (SQLException e) {System.err.println("SQl exception in createNewMonimoDidaktiko");}
         catch (ClassNotFoundException e) {System.err.println("ClassNotFoundException in createNewMonimoDidaktiko");}
     }
 
-    public static String databaseMonimoDidaktikoToJSON(int perm_id) {
+    /* The SQLException should be handled by the servlet to inform the front end that something went wrong
+     * */
+    public static String databaseMonimoDidaktikoToJSON(int perm_id) throws SQLException {
 
         try {
             ResultSet rs;
@@ -50,13 +53,14 @@ public class EditMonimoDidaktikoTable {
             String json=DB_Connection.getResultsToJSON(rs);
             return json;
         }
-        catch (SQLException e) {System.err.println("SQLException at databaseMonimoDidaktikoToJSON");}
         catch (ClassNotFoundException e) {System.err.println("ClassNotFoundException at databseMonimoDidaktikoToJSON");}
 
         return null;
     }
 
-    public static Monimo_didaktiko monimoDidaktikoFromDatabase(int perm_id){
+    /* The SQLException should be handled by the servlet to inform the front end that something went wrong
+     * */
+    public static Monimo_didaktiko monimoDidaktikoFromDatabase(int perm_id) throws SQLException {
         return jsonToMonimoDidaktiko(databaseMonimoDidaktikoToJSON(perm_id));
     }
 }

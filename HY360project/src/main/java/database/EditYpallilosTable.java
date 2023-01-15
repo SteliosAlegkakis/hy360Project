@@ -3,15 +3,12 @@ package database;
 import com.google.gson.Gson;
 import mainClasses.Ypallilos;
 import database.DB_Connection;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import javax.servlet.http.HttpServletRequest;
 
 public class EditYpallilosTable {
 
-    public static void addYpallilosFromJSON(String json) {
+    public static void addYpallilosFromJSON(String json) throws SQLException {
         Ypallilos ypallilos = jsonToYpallilos(json);
         createNewYpallilos(ypallilos);
     }
@@ -22,12 +19,12 @@ public class EditYpallilosTable {
         return ypallilos;
     }
 
-    public static Ypallilos ypallilosFromJs(HttpServletRequest request){
+    public static Ypallilos ypallilosFromJs(HttpServletRequest request) {
         Ypallilos ypallilos = new Ypallilos();
         ypallilos.setName(request.getParameter("name"));
         ypallilos.setAddress(request.getParameter("address"));
         ypallilos.setPhone(request.getParameter("phone"));
-        ypallilos.setStartDate(request.getParameter("start_date"));
+        ypallilos.setStartDate(request.getParameter("start_date"));//format -> yyyy-mm-dd
         ypallilos.setIBAN(request.getParameter("IBAN"));
         ypallilos.setBank(request.getParameter("bank"));
         ypallilos.setCategory(request.getParameter("category"));
@@ -38,7 +35,9 @@ public class EditYpallilosTable {
         return ypallilos;
     }
 
-    public static void createNewYpallilos(Ypallilos ypallilos) {
+    /* The SQLException should be handled by the servlet to inform the front end that something went wrong
+     * */
+    public static void createNewYpallilos(Ypallilos ypallilos) throws SQLException {
         try {
             Connection con = DB_Connection.getConnection();
             Statement stmt = con.createStatement();
@@ -49,7 +48,7 @@ public class EditYpallilosTable {
                     + "'" + ypallilos.getName() + "',"
                     + "'" + ypallilos.getAddress() + "',"
                     + "'" + ypallilos.getPhone() + "',"
-                    + "'" + ypallilos.getStartDate() + "',"
+                    + "'" + ypallilos.getStartDate() + "',"//the date has to be in yyyy-mm-dd format
                     + "'" + ypallilos.getIBAN() + "',"
                     + "'" + ypallilos.getBank() + "',"
                     + "'" + ypallilos.getCategory() + "',"
@@ -64,11 +63,46 @@ public class EditYpallilosTable {
             stmt.close();
 
         }
-        catch (SQLException ex) {System.err.println("SQl exception in createNewYpallilos");}
         catch (ClassNotFoundException e) {System.err.println(("ClassNotFoundException in createNewYpallilos"));}
     }
 
-    public static String databaseYpallilosToJSON(String name) {
+    /* The SQLException should be handled by the servlet to inform the front end that something went wrong
+     * */
+    public static void updateYpallilos( Ypallilos ypallilos) throws SQLException {
+        Statement stmt = null;
+        Connection con = null;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("UPDATE ypallilos ")
+                    .append("SET ")
+                    .append("name = '" + ypallilos.getName() + "', " +
+                            "address = '" + ypallilos.getAddress() + "', " +
+                            "phone = '" + ypallilos.getPhone() + "', " +
+                            "start_date = '" + ypallilos.getStartDate() + "', " +//the date has to be in yyyy-mm-dd format
+                            "IBAN = '" + ypallilos.getIBAN() + "', " +
+                            "bank = '" + ypallilos.getBank() + "', " +
+                            "dept = '" + ypallilos.getDept() + "', " +
+                            "marital_status = '" + ypallilos.getMaritalStatus() + "', " +
+                            "children_num = '" + ypallilos.getChildrenNum() + "', " +
+                            "children_ages = '" + ypallilos.getChildrenAges())
+                    .append("' WHERE emp_id = " + ypallilos.getEmpID() + ";");
+
+            PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+            stmtIns.executeUpdate();
+            System.out.println("#Update executed successfully");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            DB_Connection.closeDBConnection(stmt, con);
+        }
+    }
+
+    /* The SQLException should be handled by the servlet to inform the front end that something went wrong
+     * */
+    public static String databaseYpallilosToJSON(String name) throws SQLException {
 
         ResultSet rs;
         try {
@@ -79,7 +113,6 @@ public class EditYpallilosTable {
             String json=DB_Connection.getResultsToJSON(rs);
             return json;
         }
-        catch (SQLException e) {System.err.println("SQLException in databaseYpallilosToJSON ");}
         catch (ClassNotFoundException e) {System.err.println("ClassNotFoundException in databaseYpallilosToJSON");}
         return null;
     }
