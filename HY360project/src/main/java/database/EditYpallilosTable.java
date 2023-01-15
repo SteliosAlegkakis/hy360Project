@@ -3,10 +3,8 @@ package database;
 import com.google.gson.Gson;
 import mainClasses.Ypallilos;
 import database.DB_Connection;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
@@ -75,6 +73,38 @@ public class EditYpallilosTable {
 //        catch (SQLException ex) {System.err.println("SQl exception in createNewYpallilos");}
 //        catch (ClassNotFoundException e) {System.err.println(("ClassNotFoundException in createNewYpallilos"));}
 //    }
+
+    public static void updateYpallilos( Ypallilos ypallilos) throws ClassNotFoundException {
+        Statement stmt = null;
+        Connection con = null;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("UPDATE ypallilos ")
+                    .append("SET ")
+                    .append("name = '" + ypallilos.getName() + "', " +
+                            "address = '" + ypallilos.getAddress() + "', " +
+                            "phone = '" + ypallilos.getPhone() + "', " +
+                            "start_date = '" + new java.sql.Date((ypallilos.getStartDate().getTime())) + "', " +
+                            "IBAN = '" + ypallilos.getIBAN() + "', " +
+                            "bank = '" + ypallilos.getBank() + "', " +
+                            "dept = '" + ypallilos.getDept() + "', " +
+                            "marital_status = '" + ypallilos.getMaritalStatus() + "', " +
+                            "children_num = '" + ypallilos.getChildrenNum() + "', " +
+                            "children_ages = '" + ypallilos.getChildrenAges())
+                    .append("' WHERE emp_id = " + 4359 + ";");
+
+            PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+            stmtIns.executeUpdate();
+            System.out.println("#Update executed successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DB_Connection.closeDBConnection(stmt, con);
+        }
+    }
 
     public static String databaseYpallilosToJSON(String name) {
 
