@@ -1,14 +1,14 @@
 package mainClasses;
 
-public class Symvasiouxo_didaktiko {
-    int temp_id,lib_allowance;
-    String exp_date;
+public class Symvasiouxo_didaktiko extends Symvash_misthodosias{
+    double lib_allowance;
 
-    public void setTempId(int temp_id){this.temp_id=temp_id;}
-    public void setLibAllowance(int lib_allowance){this.lib_allowance=lib_allowance;}
-    public void setExpDate(String exp_date){this.exp_date=exp_date;}
+    public Symvasiouxo_didaktiko(int temp_id, double salary, String marital_status, int children_num, String children_ages) {
+        super(temp_id, salary, marital_status, children_num, children_ages);
+        this.lib_allowance=200;
+    }
 
-    public int getTempId(){return this.temp_id;}
-    public int getLibAllowance(){return this.lib_allowance;}
-    public String getExpDate(){return this.exp_date;}
+    public void setLibAllowance(double lib_allowance){this.lib_allowance=lib_allowance;}
+    public double getLibAllowance(){return this.lib_allowance;}
+
 }
