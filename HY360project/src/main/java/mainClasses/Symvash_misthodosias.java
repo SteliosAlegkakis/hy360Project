@@ -7,10 +7,11 @@ import java.util.StringTokenizer;
 public class Symvash_misthodosias {
     int temp_id;
     double salary,family_allowance;
+    String exp_date;
 
-    public Symvash_misthodosias(int temp_id,double salary,String marital_status,int children_num,String children_ages){
-        this.temp_id=temp_id;
+    public Symvash_misthodosias(double salary,String marital_status,int children_num,String children_ages,String exp_date){
         this.salary=salary;
+        this.exp_date=exp_date;
         this.family_allowance=calculateFamilyAllowance(marital_status,children_num,children_ages,salary);
     }
 
@@ -37,8 +38,10 @@ public class Symvash_misthodosias {
     public void setTempId(int temp_id){this.temp_id=temp_id;}
     public void setFamilyAllowance(double fam_allowance){this.family_allowance=fam_allowance;}
     public void setSalary(double salary){this.salary=salary;}
+    public void setExpDate(String exp_date){this.exp_date=exp_date;}
 
     public int getTempId(){return this.temp_id;}
     public double getFamilyAllowance(){return this.family_allowance;}
     public double getSalary(){return this.salary;}
+    public String getExpDate(){return this.exp_date;}
 }

@@ -7,9 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import database.*;
-import mainClasses.Monimo_didaktiko;
-import mainClasses.Monimo_dioikitiko;
-import mainClasses.Ypallilos;
+import mainClasses.*;
 
 @WebServlet(name = "MyServlet", value = "/MyServlet")
 public class MyServlet extends HttpServlet {
@@ -31,7 +29,7 @@ public class MyServlet extends HttpServlet {
         String request_type = request.getParameter("request");
         if(request_type.equals("change_salaries")) changeSalaries();
         else if(request_type.equals("hire")) {hire(request,response);}
-        else if(request_type.equals("contract")) contract();
+        else if(request_type.equals("contract")) contract(request,response);
         else if(request_type.equals("update_employee")) updateEmployee();
         else if(request_type.equals("fire")) fire();
         else if(request_type.equals("payroll")) payroll();
@@ -70,8 +68,35 @@ public class MyServlet extends HttpServlet {
         }
     }
 
-    private void contract(){
+    private void contract(HttpServletRequest request, HttpServletResponse response){
         System.out.println("contract");
+
+        try{
+            Ypallilos ypallilos = EditYpallilosTable.ypallilosFromJs(request);
+            EditYpallilosTable.createNewYpallilos(ypallilos);
+
+            String name = ypallilos.getName();
+            ypallilos = EditYpallilosTable.jsonToYpallilos(EditYpallilosTable.databaseYpallilosToJSON(name));
+
+            String exp_date = request.getParameter("exp_date");
+            double salary = Double.parseDouble(request.getParameter("salary"));
+
+            if(ypallilos.getCategory().equals("symvasiouxo_didaktiko")) {
+                Symvasiouxo_didaktiko sd = new Symvasiouxo_didaktiko(salary, ypallilos.getMaritalStatus(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),exp_date);
+                EditSymvasiouxoDidaktikoTable.createNewDatabaseEntry(sd);
+            }
+            else if(ypallilos.getCategory().equals("symvasiouxo_dioikitiko")){
+                Symvasiouxo_dioikitiko sd = new Symvasiouxo_dioikitiko(salary, ypallilos.getMaritalStatus(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),exp_date);
+                EditSymvasiouxoDioikitikoTable.createNewDatabaseEntry(sd);
+            }
+
+            response.setStatus(200);
+        }
+        catch (SQLException e) {
+            System.err.println("SQLException at hire() in servlet");
+            response.setStatus(500);
+        }
+
         //TODO contract()
     }
 

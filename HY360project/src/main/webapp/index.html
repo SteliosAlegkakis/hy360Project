@@ -89,27 +89,33 @@
                     <input type="text" name="address" placeholder="Διέυθυνση">
                 </div>
                 <div class="row">
-                    <input type="text" name="phone_number" placeholder="Τηλέφωνο">
-                    <input type="date" name="date" placeholder="Ημερομηνια">
+                    <input type="text" name="phone" placeholder="Τηλέφωνο">
+                    <input type="text" name="dept" placeholder="Τμήμα Εργασίας">
+                </div>
+                <div class="row">
+                    <label>Έναρξη</label>
+                    <input type="date" name="start_date">
+                    <label>Λήξη</label>
+                    <input type="date" name="exp_date">
                 </div>
                 <div class="row">
                     <input type="text" name="IBAN" placeholder="IBAN">
                     <input type="text" name="bank" placeholder="Όνομα Τράπεζας">
                 </div>
                 <div class="row">
-                    <input type="text" name="department" placeholder="Τμήμα Εργασίας">
+                    <input type="text" name="salary" placeholder="Μισθός">
                 </div>
                 <div class="radio">
                     <h4 class="radio-title button" onclick="viewElement('contract_staff_category',this,'Κατηγορία Προσωπικού')">Κατηγορία Προσωπικού ˅</h4>
                     <div class="radio-input" id="contract_staff_category" style="display: none">
                         <div class="radio-element">
                             <label>Συμβασιούχο Διδακτικό Προσωπικό</label>
-                            <input type="radio" name="staff-category" value="symvasiouxo-didaktiko" required>
+                            <input type="radio" name="category" value="symvasiouxo_didaktiko" required>
                         </div>
 
                         <div class="radio-element">
                             <label>Συμβασιούχο Διοικιτικό Προσωπικό</label>
-                            <input type="radio" name="staff-category" value="symvasiouxo-dioikitiko" required>
+                            <input type="radio" name="category" value="symvasiouxo_dioikitiko" required>
                         </div>
                     </div>
                 </div>
@@ -128,11 +134,15 @@
                     </div>
                 </div>
                 <div class="row">
-                    <input type="text" placeholder="Αριθμός Παιδιών">
-                    <input type="text" placeholder="Ηλικίες Παιδίων">
+                    <input type="text" name="children_num" placeholder="Αριθμός Παιδιών">
+                    <input type="text" name="children_ages" placeholder="Ηλικίες Παιδίων">
                 </div>
-                <button class="submit">Υποβολή</button>
+                <h3 id="contract_fail" class="fail_message" style="color: red">Η αίτηση απορίφθηκε. Ελέγξετε ξανά την φόρμα.</h3>
+                <button class="submit" onclick="server_request('contract','POST','contract')">Υποβολή</button>
             </form>
+            <div id="contract_success" class="success_message" style="display: none">
+                <h2 style="color: green">Υποβλήθηκε με επιτυχία</h2>
+            </div>
     
             <form id="update" style="display: none;">
                 <h2>Αλλαγή Στοιχείων Υπαλλήλων</h2>
@@ -141,8 +151,8 @@
                     <input type="text" name="address" placeholder="Διεύθυνση">
                 </div>
                 <div class="row">
-                    <input type="text" name="phone_number" placeholder="Τηλέφωνο">
-                    <input type="date" name="date" placeholder="Ημερομηνία">
+                    <input type="text" name="phone" placeholder="Τηλέφωνο">
+                    <input type="date" name="start_date" placeholder="Ημερομηνία">
                 </div>
                 <div class="row">
                     <input type="text" name="IBAN" placeholder="IBAN">
