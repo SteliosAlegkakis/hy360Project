@@ -5,9 +5,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import database.EditMonimoDidaktikoTable;
-import database.EditMonimoDioikitikoTable;
-import database.EditYpallilosTable;
+
+import database.*;
 import mainClasses.Monimo_didaktiko;
 import mainClasses.Monimo_dioikitiko;
 import mainClasses.Ypallilos;
