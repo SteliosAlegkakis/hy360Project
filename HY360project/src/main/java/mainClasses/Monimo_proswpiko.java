@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.lang.Math;
 
 public class Monimo_proswpiko {
     int perm_id,years;
@@ -34,7 +35,7 @@ public class Monimo_proswpiko {
             //raise the basic salary by 15% for each year
             for(int i=this.years; i>0; i--) salary+=salary*0.15;
         }
-        return salary; //if the employee has < 1 years of experience the salary has stayed the same
+        return Math.floor(salary); //if the employee has < 1 years of experience the salary has stayed the same
     }
 
     private double calculateFamilyAllowance(String marital_status,int children_num,String children_ages,double salary){
@@ -54,7 +55,7 @@ public class Monimo_proswpiko {
             if(Integer.parseInt(ages.get(i))<18) family_allowance += salary*0.05;//5% for each child under 18
         }
 
-        return family_allowance;
+        return Math.floor(family_allowance);
     }
 
     public void setPermId(int perm_id){this.perm_id=perm_id;}

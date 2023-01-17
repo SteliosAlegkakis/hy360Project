@@ -3,6 +3,7 @@ package mainClasses;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.lang.Math;
 
 public class Symvash_misthodosias {
     int temp_id;
@@ -32,7 +33,7 @@ public class Symvash_misthodosias {
             if(Integer.parseInt(ages.get(i))<18) family_allowance += salary*0.05;//5% for each child under 18
         }
 
-        return family_allowance;
+        return Math.floor(family_allowance);
     }
 
     public void setTempId(int temp_id){this.temp_id=temp_id;}
