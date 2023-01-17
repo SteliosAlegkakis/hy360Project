@@ -1,12 +1,11 @@
 package database;
 
 import com.google.gson.Gson;
+import mainClasses.Monimo_didaktiko;
 import mainClasses.Monimo_dioikitiko;
 import database.DB_Connection;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 
 public class EditMonimoDioikitikoTable {
     public static Monimo_dioikitiko jsonToObject(String json) {
@@ -62,5 +61,30 @@ public class EditMonimoDioikitikoTable {
      * */
     public static Monimo_dioikitiko monimoDioikitikoFromDatabase(int perm_id) throws SQLException {
         return jsonToObject(databaseToJSON(perm_id));
+    }
+
+    public static void update(Monimo_dioikitiko monimo_dioikitiko) throws SQLException {
+        Statement stmt = null;
+        Connection con = null;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("UPDATE monimo_dioikitiko ")
+                    .append("SET ")
+                    .append("years = '" + monimo_dioikitiko.getYears() + "', " +
+                            "salary = '" + monimo_dioikitiko.getSalary() + "', " +
+                            "family_allowance = '" + monimo_dioikitiko.getFamilyAllowance())
+                    .append("' WHERE perm_id = " + monimo_dioikitiko.getPermId() + ";");
+
+            PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+            stmtIns.executeUpdate();
+            System.out.println("#Update executed successfully");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            DB_Connection.closeDBConnection(stmt, con);
+        }
     }
 }
