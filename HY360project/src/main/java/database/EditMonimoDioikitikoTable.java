@@ -87,4 +87,24 @@ public class EditMonimoDioikitikoTable {
             DB_Connection.closeDBConnection(stmt, con);
         }
     }
+    public static void delete(int perm_id) throws SQLException {
+        Statement stmt = null;
+        Connection con = null;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("DELETE FROM monimo_dioikitiko WHERE perm_id = " + perm_id + ";" );
+            PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+            stmtIns.execute();
+            System.out.println("#Delete executed successfully");
+
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            DB_Connection.closeDBConnection(stmt, con);
+        }
+    }
 }
