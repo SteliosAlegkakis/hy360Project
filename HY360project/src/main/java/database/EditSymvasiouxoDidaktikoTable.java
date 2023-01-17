@@ -6,6 +6,7 @@ import mainClasses.Ypallilos;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -54,5 +55,30 @@ public class EditSymvasiouxoDidaktikoTable {
                 + " PRIMARY KEY ( temp_id))";
         stmt.execute(query);
         stmt.close();
+    }
+    public static void update(Symvasiouxo_didaktiko symvasiouxo_didaktiko) {
+        Statement stmt = null;
+        Connection con = null;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("UPDATE symvasiouxo_didaktiko ")
+                    .append("SET ")
+                    .append("salary = '" + symvasiouxo_didaktiko.getSalary() + "', " +
+                            "family_allowance = '" + symvasiouxo_didaktiko.getFamilyAllowance() + "', " +
+                            "exp_date = '" + symvasiouxo_didaktiko.getExpDate() + "', " +
+                            "lib_allowance = '" + symvasiouxo_didaktiko.getLibAllowance())
+                    .append("' WHERE temp_id = " + symvasiouxo_didaktiko.getTempId() + ";");
+
+            PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+            stmtIns.executeUpdate();
+            System.out.println("#Update symvasiouxo_didaktiko executed successfully");
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DB_Connection.closeDBConnection(stmt, con);
+        }
     }
 }
