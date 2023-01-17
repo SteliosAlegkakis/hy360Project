@@ -6,6 +6,7 @@ import mainClasses.Symvasiouxo_dioikitiko;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -50,5 +51,30 @@ public class EditSymvasiouxoDioikitikoTable {
                 + " PRIMARY KEY ( temp_id))";
         stmt.execute(query);
         stmt.close();
+    }
+
+    public static void update(Symvasiouxo_dioikitiko symvasiouxo_dioikitiko) throws SQLException {
+        Statement stmt = null;
+        Connection con = null;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("UPDATE symvasiouxo_dioikitiko ")
+                    .append("SET ")
+                    .append("salary = '" + symvasiouxo_dioikitiko.getSalary() + "', " +
+                            "family_allowance = '" + symvasiouxo_dioikitiko.getFamilyAllowance() + "', " +
+                            "exp_date = '" + symvasiouxo_dioikitiko.getExpDate())
+                    .append("' WHERE temp_id = " + symvasiouxo_dioikitiko.getTempId() + ";");
+
+            PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+            stmtIns.executeUpdate();
+            System.out.println("#Update executed successfully");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            DB_Connection.closeDBConnection(stmt, con);
+        }
     }
 }
