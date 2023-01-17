@@ -9,17 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 public class EditYpallilosTable {
 
     public static void addYpallilosFromJSON(String json) throws SQLException {
-        Ypallilos ypallilos = jsonToYpallilos(json);
-        createNewYpallilos(ypallilos);
+        Ypallilos ypallilos = jsonToObject(json);
+        createNewDatabaseEntry(ypallilos);
     }
 
-    public static Ypallilos jsonToYpallilos(String json) {
+    public static Ypallilos jsonToObject(String json) {
         Gson gson = new Gson();
         Ypallilos ypallilos = gson.fromJson(json, Ypallilos.class);
         return ypallilos;
     }
 
-    public static Ypallilos ypallilosFromJs(HttpServletRequest request) {
+    public static Ypallilos objectFromJs(HttpServletRequest request) {
         Ypallilos ypallilos = new Ypallilos();
         ypallilos.setName(request.getParameter("name"));
         ypallilos.setAddress(request.getParameter("address"));
@@ -37,7 +37,7 @@ public class EditYpallilosTable {
 
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
      * */
-    public static void createNewYpallilos(Ypallilos ypallilos) throws SQLException {
+    public static void createNewDatabaseEntry(Ypallilos ypallilos) throws SQLException {
         try {
             Connection con = DB_Connection.getConnection();
             Statement stmt = con.createStatement();
@@ -68,7 +68,7 @@ public class EditYpallilosTable {
 
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
      * */
-    public static void updateYpallilos( Ypallilos ypallilos) throws SQLException {
+    public static void update( Ypallilos ypallilos) throws SQLException {
         Statement stmt = null;
         Connection con = null;
         try {
@@ -102,7 +102,7 @@ public class EditYpallilosTable {
 
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
      * */
-    public static String databaseYpallilosToJSON(String name) throws SQLException {
+    public static String databaseToJSON(String name) throws SQLException {
 
         ResultSet rs;
         try {

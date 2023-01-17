@@ -10,7 +10,7 @@ import java.sql.Statement;
 
 public class EditMonimoDidaktikoTable {
 
-    public static Monimo_didaktiko jsonToMonimoDidaktiko(String json) {
+    public static Monimo_didaktiko jsonToObject(String json) {
         Gson gson = new Gson();
         Monimo_didaktiko monimo_didaktiko = gson.fromJson(json, Monimo_didaktiko.class);
         return monimo_didaktiko;
@@ -18,7 +18,7 @@ public class EditMonimoDidaktikoTable {
 
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
      * */
-    public static void createNewMonimoDidaktiko(Monimo_didaktiko monimo_didaktiko) throws SQLException {
+    public static void createNewDatabaseEntry(Monimo_didaktiko monimo_didaktiko) throws SQLException {
         try {
             Connection con = DB_Connection.getConnection();
             Statement stmt = con.createStatement();
@@ -42,7 +42,7 @@ public class EditMonimoDidaktikoTable {
 
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
      * */
-    public static String databaseMonimoDidaktikoToJSON(int perm_id) throws SQLException {
+    public static String databaseToJSON(int perm_id) throws SQLException {
 
         try {
             ResultSet rs;
@@ -60,7 +60,7 @@ public class EditMonimoDidaktikoTable {
 
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
      * */
-    public static Monimo_didaktiko monimoDidaktikoFromDatabase(int perm_id) throws SQLException {
-        return jsonToMonimoDidaktiko(databaseMonimoDidaktikoToJSON(perm_id));
+    public static Monimo_didaktiko ObjectFromDatabase(int perm_id) throws SQLException {
+        return jsonToObject(databaseToJSON(perm_id));
     }
 }

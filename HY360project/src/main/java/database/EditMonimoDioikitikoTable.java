@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class EditMonimoDioikitikoTable {
-    public static Monimo_dioikitiko jsonToMonimoDioikitiko(String json) {
+    public static Monimo_dioikitiko jsonToObject(String json) {
         Gson gson = new Gson();
         Monimo_dioikitiko monimo_dioikitiko = gson.fromJson(json, Monimo_dioikitiko.class);
         return monimo_dioikitiko;
@@ -17,7 +17,7 @@ public class EditMonimoDioikitikoTable {
 
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
     * */
-    public static void createNewMonimoDioikitiko(Monimo_dioikitiko monimo_dioikitiko) throws SQLException {
+    public static void createNewDatabaseEntry(Monimo_dioikitiko monimo_dioikitiko) throws SQLException {
         try {
             Connection con = DB_Connection.getConnection();
             Statement stmt = con.createStatement();
@@ -41,7 +41,7 @@ public class EditMonimoDioikitikoTable {
 
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
      * */
-    public static String databaseMonimoDioikitikoToJSON(int perm_id) throws SQLException {
+    public static String databaseToJSON(int perm_id) throws SQLException {
 
         try {
             ResultSet rs;
@@ -61,6 +61,6 @@ public class EditMonimoDioikitikoTable {
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
      * */
     public static Monimo_dioikitiko monimoDioikitikoFromDatabase(int perm_id) throws SQLException {
-        return jsonToMonimoDioikitiko(databaseMonimoDioikitikoToJSON(perm_id));
+        return jsonToObject(databaseToJSON(perm_id));
     }
 }

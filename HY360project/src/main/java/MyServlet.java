@@ -1,7 +1,5 @@
 import javax.servlet.annotation.*;
-import java.io.IOException;
 import java.sql.SQLException;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +10,7 @@ import mainClasses.*;
 @WebServlet(name = "MyServlet", value = "/MyServlet")
 public class MyServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
         String request_type = request.getParameter("request");
         if(request_type.equals("get_employee")) getEmployee();
@@ -25,7 +23,7 @@ public class MyServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         String request_type = request.getParameter("request");
         if(request_type.equals("change_salaries")) changeSalaries();
         else if(request_type.equals("hire")) {hire(request,response);}
@@ -44,20 +42,20 @@ public class MyServlet extends HttpServlet {
         System.out.println("hire");
 
         try{
-            Ypallilos ypallilos = EditYpallilosTable.ypallilosFromJs(request);
-            EditYpallilosTable.createNewYpallilos(ypallilos);
+            Ypallilos ypallilos = EditYpallilosTable.objectFromJs(request);
+            EditYpallilosTable.createNewDatabaseEntry(ypallilos);
 
             String name = ypallilos.getName();
-            ypallilos = EditYpallilosTable.jsonToYpallilos(EditYpallilosTable.databaseYpallilosToJSON(name));
+            ypallilos = EditYpallilosTable.jsonToObject(EditYpallilosTable.databaseToJSON(name));
 
 
             if(ypallilos.getCategory().equals("monimo_didaktiko")) {
                 Monimo_didaktiko md = new Monimo_didaktiko(ypallilos.getEmpID(), ypallilos.getStartDate(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),ypallilos.getMaritalStatus());
-                EditMonimoDidaktikoTable.createNewMonimoDidaktiko(md);
+                EditMonimoDidaktikoTable.createNewDatabaseEntry(md);
             }
             else if(ypallilos.getCategory().equals("monimo_dioikitiko")){
                 Monimo_dioikitiko md = new Monimo_dioikitiko(ypallilos.getEmpID(), ypallilos.getStartDate(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),ypallilos.getMaritalStatus());
-                EditMonimoDioikitikoTable.createNewMonimoDioikitiko(md);
+                EditMonimoDioikitikoTable.createNewDatabaseEntry(md);
             }
 
             response.setStatus(200);
@@ -72,11 +70,11 @@ public class MyServlet extends HttpServlet {
         System.out.println("contract");
 
         try{
-            Ypallilos ypallilos = EditYpallilosTable.ypallilosFromJs(request);
-            EditYpallilosTable.createNewYpallilos(ypallilos);
+            Ypallilos ypallilos = EditYpallilosTable.objectFromJs(request);
+            EditYpallilosTable.createNewDatabaseEntry(ypallilos);
 
             String name = ypallilos.getName();
-            ypallilos = EditYpallilosTable.jsonToYpallilos(EditYpallilosTable.databaseYpallilosToJSON(name));
+            ypallilos = EditYpallilosTable.jsonToObject(EditYpallilosTable.databaseToJSON(name));
 
             String exp_date = request.getParameter("exp_date");
             double salary = Double.parseDouble(request.getParameter("salary"));
