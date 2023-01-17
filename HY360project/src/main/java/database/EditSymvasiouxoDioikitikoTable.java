@@ -77,4 +77,24 @@ public class EditSymvasiouxoDioikitikoTable {
             DB_Connection.closeDBConnection(stmt, con);
         }
     }
+    public static void delete(int temp_id) throws SQLException {
+        Statement stmt = null;
+        Connection con = null;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("DELETE FROM symvasiouxo_dioikitiko WHERE temp_id = " + temp_id + ";" );
+            PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+            stmtIns.execute();
+            System.out.println("#Delete executed successfully");
+
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            DB_Connection.closeDBConnection(stmt, con);
+        }
+    }
 }
