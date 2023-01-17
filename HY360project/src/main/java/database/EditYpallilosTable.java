@@ -100,6 +100,27 @@ public class EditYpallilosTable {
         }
     }
 
+    public static void delete(int emp_id) throws SQLException {
+        Statement stmt = null;
+        Connection con = null;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("DELETE FROM ypallilos WHERE emp_id = " + emp_id + ";" );
+            PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+            stmtIns.execute();
+            System.out.println("#Delete executed successfully");
+
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            DB_Connection.closeDBConnection(stmt, con);
+        }
+    }
+
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
      * */
     public static String databaseToJSON(String name) throws SQLException {
