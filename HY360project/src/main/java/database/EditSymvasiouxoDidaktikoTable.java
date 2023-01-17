@@ -56,7 +56,7 @@ public class EditSymvasiouxoDidaktikoTable {
         stmt.execute(query);
         stmt.close();
     }
-    public static void update(Symvasiouxo_didaktiko symvasiouxo_didaktiko) {
+    public static void update(Symvasiouxo_didaktiko symvasiouxo_didaktiko) throws SQLException {
         Statement stmt = null;
         Connection con = null;
         try {
@@ -74,8 +74,8 @@ public class EditSymvasiouxoDidaktikoTable {
 
             PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
             stmtIns.executeUpdate();
-            System.out.println("#Update symvasiouxo_didaktiko executed successfully");
-        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println("#Update executed successfully");
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DB_Connection.closeDBConnection(stmt, con);
