@@ -28,8 +28,8 @@ public class MyServlet extends HttpServlet {
         if(request_type.equals("change_salaries")) changeSalaries();
         else if(request_type.equals("hire")) {hire(request,response);}
         else if(request_type.equals("contract")) contract(request,response);
-        else if(request_type.equals("update_employee")) updateEmployee();
-        else if(request_type.equals("fire")) fire();
+        else if(request_type.equals("update_employee")) updateEmployee(request,response);
+        else if(request_type.equals("fire")) fire(request,response);
         else if(request_type.equals("payroll")) payroll();
         else {
             response.setStatus(406);
@@ -75,16 +75,17 @@ public class MyServlet extends HttpServlet {
 
             String name = ypallilos.getName();
             ypallilos = EditYpallilosTable.jsonToObject(EditYpallilosTable.databaseToJSON(name));
+            int temp_id = ypallilos.getEmpID();
 
             String exp_date = request.getParameter("exp_date");
             double salary = Double.parseDouble(request.getParameter("salary"));
 
             if(ypallilos.getCategory().equals("symvasiouxo_didaktiko")) {
-                Symvasiouxo_didaktiko sd = new Symvasiouxo_didaktiko(salary, ypallilos.getMaritalStatus(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),exp_date);
+                Symvasiouxo_didaktiko sd = new Symvasiouxo_didaktiko(temp_id, salary, ypallilos.getMaritalStatus(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),exp_date);
                 EditSymvasiouxoDidaktikoTable.createNewDatabaseEntry(sd);
             }
             else if(ypallilos.getCategory().equals("symvasiouxo_dioikitiko")){
-                Symvasiouxo_dioikitiko sd = new Symvasiouxo_dioikitiko(salary, ypallilos.getMaritalStatus(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),exp_date);
+                Symvasiouxo_dioikitiko sd = new Symvasiouxo_dioikitiko(temp_id, salary, ypallilos.getMaritalStatus(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),exp_date);
                 EditSymvasiouxoDioikitikoTable.createNewDatabaseEntry(sd);
             }
 
@@ -95,41 +96,57 @@ public class MyServlet extends HttpServlet {
             response.setStatus(500);
         }
 
-        //TODO contract()
     }
 
-    private void updateEmployee(){
+    private void updateEmployee(HttpServletRequest request, HttpServletResponse response){
         System.out.println("update");
         //TODO updateEmployee()
     }
 
     private void changeSalaries(){
         System.out.println("Change Salaries");
-        //TODO changeSalaries()
     }
 
-    private void fire(){
+    private void fire(HttpServletRequest request, HttpServletResponse response){
         System.out.println("Fire");
-        //TODO fire()
+        try{
+            int emp_id = Integer.parseInt(request.getParameter("emp_id"));
+            String name = request.getParameter("name");
+            Ypallilos ypallilos = EditYpallilosTable.jsonToObject(EditYpallilosTable.databaseToJSON(name));
+            if(emp_id != ypallilos.getEmpID()) {
+                response.setStatus(406);
+                return;
+            }
+            String category = ypallilos.getCategory();
+
+            EditYpallilosTable.delete(emp_id);
+            if(category.equals("monimo_didaktiko")) EditMonimoDidaktikoTable.delete(emp_id);
+            else if(category.equals("monimo_dioikitiko")) EditMonimoDioikitikoTable.delete(emp_id);
+            else if(category.equals(("symvasiouxo_dioikitiko"))) EditSymvasiouxoDioikitikoTable.delete(emp_id);
+            else if(category.equals("symvasiouxo_didaktiko")) EditSymvasiouxoDidaktikoTable.delete(emp_id);
+            else response.setStatus(500);
+
+            response.setStatus(200);
+        }
+        catch (SQLException e){
+            System.err.println("SQLException at fire()");
+            response.setStatus(500);
+        }
     }
 
     private void payroll(){
         System.out.println("payroll");
-        //TODO payroll()
     }
 
     private void getEmployee(){
         System.out.println("get user");
-        //TODO getEmployee()
     }
 
     private void getCategory(){
         System.out.println("get category");
-        //TODO getCategory()
     }
 
     private void getStatistics(){
         System.out.println("statistics");
-        //TODO getStatistics()
     }
 }
