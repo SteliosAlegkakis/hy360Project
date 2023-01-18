@@ -10,7 +10,8 @@ public class Symvash_misthodosias {
     double salary,family_allowance;
     String exp_date;
 
-    public Symvash_misthodosias(double salary,String marital_status,int children_num,String children_ages,String exp_date){
+    public Symvash_misthodosias(int temp_id,double salary,String marital_status,int children_num,String children_ages,String exp_date){
+        this.temp_id=temp_id;
         this.salary=salary;
         this.exp_date=exp_date;
         this.family_allowance=calculateFamilyAllowance(marital_status,children_num,children_ages,salary);
