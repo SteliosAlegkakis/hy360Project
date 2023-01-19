@@ -35,9 +35,8 @@ public class EditPaymentsTable {
             Statement stmt = con.createStatement();
 
             String insertQuery = "INSERT INTO "
-                    + " payment (payment_id,emp_id,employee_category,amount,family_allowance,research_allowance,lib_allowance,date)"
+                    + " payment (emp_id,employee_category,amount,family_allowance,research_allowance,lib_allowance,date)"
                     + " VALUES ("
-                    + "'" + p.getBillId() + "',"
                     + "'" + p.getEmpId() + "',"
                     + "'" + p.getEmployeeCategory() + "',"
                     + "'" + p.getAmount() + "',"

@@ -1,7 +1,7 @@
 package mainClasses;
 
 public class Payments {
-    int bill_id,emp_id;
+    int payment_id,emp_id;
     double amount, family_allowance, research_allowance, lib_allowance;
     String date,employee_category;
 
@@ -15,7 +15,7 @@ public class Payments {
         this.lib_allowance = lib_allowance;
     }
 
-    public void setBillId(int bill_id){this.bill_id=bill_id;}
+    public void setPayment_id(int payment_id){this.payment_id=payment_id;}
     public void setAmount(double amount){this.amount=amount;}
     public void setEmpId(int emp_id){this.emp_id=emp_id;}
     public void setDate(String date){this.date=date;}
@@ -24,7 +24,7 @@ public class Payments {
     public void setLib_allowance(double lib_allowance) {this.lib_allowance = lib_allowance; }
     public void setFamily_allowance(double family_allowance) { this.family_allowance = family_allowance; }
 
-    public int getBillId(){return this.bill_id;}
+    public int getPayment_id(){return this.payment_id;}
     public double getAmount(){return this.amount;}
     public int getEmpId(){return this.emp_id;}
     public String getDate(){return this.date;}
@@ -36,7 +36,7 @@ public class Payments {
     @Override
     public String toString() {
         return "Payments{" +
-                "bill_id=" + bill_id +
+                "payment_id=" + payment_id +
                 ", emp_id=" + emp_id +
                 ", amount=" + amount +
                 ", family_allowance=" + family_allowance +
