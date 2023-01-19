@@ -311,16 +311,16 @@ public class EditPaymentsTable {
             stmt = con.createStatement();
 
             if(type_of_emp.equals("monimo_dioikitiko")) {
-                insQuery.append("SELECT SUM(amount) as amount FROM payment JOIN monimo_dioikitiko ON payment.emp_id = monimo_dioikitiko.perm_id;");
+                insQuery.append("SELECT SUM(amount + payment.family_allowance) AS amount FROM payment JOIN monimo_dioikitiko ON monimo_dioikitiko.perm_id = payment.emp_id;");
             }
             else if(type_of_emp.equals("monimo_didaktiko")) {
-                insQuery.append("SELECT SUM(amount) as amount FROM payment JOIN monimo_didaktiko ON payment.emp_id = monimo_didaktiko.perm_id;");
+                insQuery.append("SELECT SUM(amount + payment.family_allowance + payment.research_allowance) as amount FROM payment JOIN monimo_didaktiko ON payment.emp_id = monimo_didaktiko.perm_id;");
             }
             else if(type_of_emp.equals("symvasiouxo_dioikitiko")) {
-                insQuery.append("SELECT SUM(amount) as amount FROM payment JOIN symvasiouxo_dioikitiko ON payment.emp_id = symvasiouxo_dioikitiko.temp_id;");
+                insQuery.append("SELECT SUM(amount + payment.family_allowance) as amount FROM payment JOIN symvasiouxo_dioikitiko ON payment.emp_id = symvasiouxo_dioikitiko.temp_id;");
             }
             else {
-                insQuery.append("SELECT SUM(amount) as amount FROM payment JOIN symvasiouxo_didaktiko ON payment.emp_id = symvasiouxo_didaktiko.temp_id;");
+                insQuery.append("SELECT SUM(amount + payment.family_allowance + payment.lib_allowance) as amount FROM payment JOIN symvasiouxo_didaktiko ON payment.emp_id = symvasiouxo_didaktiko.temp_id;");
             }
             stmtIns = con.prepareStatement(insQuery.toString());
             stmtIns.executeQuery();
