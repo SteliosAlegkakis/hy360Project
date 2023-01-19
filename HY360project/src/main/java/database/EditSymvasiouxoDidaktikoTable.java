@@ -5,10 +5,7 @@ import mainClasses.Symvasiouxo_didaktiko;
 import mainClasses.Ypallilos;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class EditSymvasiouxoDidaktikoTable {
 
@@ -34,7 +31,7 @@ public class EditSymvasiouxoDidaktikoTable {
                     + ")";
 
             stmt.executeUpdate(insertQuery);
-            System.out.println("#Ypallilos was successfully added in the database.");
+            System.out.println("#symvasiouxo_didaktiko was successfully added in the database.");
             stmt.close();
 
         }
@@ -56,6 +53,22 @@ public class EditSymvasiouxoDidaktikoTable {
         stmt.execute(query);
         stmt.close();
     }
+
+    public static String databaseToJSON(int temp_id) throws SQLException {
+
+        ResultSet rs;
+        try {
+            Connection con = DB_Connection.getConnection();
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM symvasiouxo_didaktiko WHERE temp_id = '" + temp_id + "'");
+            rs.next();
+            String json=DB_Connection.getResultsToJSON(rs);
+            return json;
+        }
+        catch (ClassNotFoundException e) {System.err.println("ClassNotFoundException in databaseSymvasiouxoDidaktikoToJSON");}
+        return null;
+    }
+
     public static void update(Symvasiouxo_didaktiko symvasiouxo_didaktiko) throws SQLException {
         Statement stmt = null;
         Connection con = null;
