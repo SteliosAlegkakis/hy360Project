@@ -76,7 +76,7 @@ public class EditPaymentsTable {
                 stmtIns.executeQuery();
                 rs = stmtIns.getResultSet();
                 while (rs.next()) {
-                    singleinfo = new Payments(rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, 0, rs.getString("date"));
+                    singleinfo = new Payments( rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, 0, rs.getString("date"));
                     info.add(singleinfo);
                 }
             }
@@ -99,6 +99,7 @@ public class EditPaymentsTable {
                     singleinfo = new Payments( rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, rs.getDouble("lib_allowance"), rs.getString("date"));
                     info.add(singleinfo);
                 }
+
             }
             else if(type.equals("symvasiouxo_dioikitiko")) {
                 insQuery.append("SELECT payment.payment_id, ypallilos.emp_ID, payment.employee_category, payment.amount, symvasiouxo_dioikitiko.family_allowance, payment.date FROM symvasiouxo_dioikitiko, ypallilos, payment WHERE ypallilos.emp_ID = payment.emp_id AND ypallilos.emp_ID = symvasiouxo_dioikitiko.temp_id;");
@@ -119,5 +120,173 @@ public class EditPaymentsTable {
             e.printStackTrace();
         }
         return info;
+    }
+
+    public static double MMASalaryForTypeOfEmployee(String type_of_emp, String type_of_sal) throws SQLException {
+        Statement stmt = null;
+        Connection con = null;
+        double ret = 0;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+            if(type_of_emp.equals("symvasiouxo_dioikitiko")) {
+                if(type_of_sal.equals("max")) {
+                    insQuery.append("SELECT MAX(payment.amount) AS max_sal FROM payment INNER JOIN symvasiouxo_dioikitiko" +
+                            " ON payment.emp_id = symvasiouxo_dioikitiko.temp_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if(rs.next()) {
+                        ret = rs.getDouble("max_sal");
+                        System.out.println("max sal = "+ ret);
+                        return ret;
+                    }
+                }
+                else if(type_of_sal.equals("min")) {
+                    insQuery.append("SELECT MIN(payment.amount) AS min_sal FROM payment INNER JOIN symvasiouxo_dioikitiko" +
+                            " ON payment.emp_id = symvasiouxo_dioikitiko.temp_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if (rs.next()) {
+                        ret = rs.getDouble("min_sal");
+                        System.out.println("min sal = " + ret);
+                        return ret;
+                    }
+                }
+                else {
+                    insQuery.append("SELECT AVG(payment.amount) AS avg_sal FROM payment INNER JOIN symvasiouxo_dioikitiko" +
+                            " ON payment.emp_id = symvasiouxo_dioikitiko.temp_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if(rs.next()) {
+                        ret = rs.getDouble("avg_sal");
+                        System.out.println("avg sal = "+ ret);
+                        return ret;
+                    }
+                }
+
+            }
+            if(type_of_emp.equals("symvasiouxo_didaktiko")) {
+                if(type_of_sal.equals("max")) {
+                    insQuery.append("SELECT MAX(payment.amount) AS max_sal FROM payment INNER JOIN symvasiouxo_didaktiko" +
+                            " ON payment.emp_id = symvasiouxo_didaktiko.temp_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if(rs.next()) {
+                        ret = rs.getDouble("max_sal");
+                        System.out.println("max sal = "+ ret);
+                        return ret;
+                    }
+                }
+                else if(type_of_sal.equals("min")) {
+                    insQuery.append("SELECT MIN(payment.amount) AS min_sal FROM payment INNER JOIN symvasiouxo_didaktiko" +
+                            " ON payment.emp_id = symvasiouxo_didaktiko.temp_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if (rs.next()) {
+                        ret = rs.getDouble("min_sal");
+                        System.out.println("min sal = " + ret);
+                        return ret;
+                    }
+                }
+                else {
+                    insQuery.append("SELECT AVG(payment.amount) AS avg_sal FROM payment INNER JOIN symvasiouxo_didaktiko" +
+                            " ON payment.emp_id = symvasiouxo_didaktiko.temp_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if(rs.next()) {
+                        ret = rs.getDouble("avg_sal");
+                        System.out.println("avg sal = "+ ret);
+                        return ret;
+                    }
+                }
+
+            }
+            if(type_of_emp.equals("monimo_dioikitiko")) {
+                if(type_of_sal.equals("max")) {
+                    insQuery.append("SELECT MAX(payment.amount) AS max_sal FROM payment INNER JOIN monimo_dioikitiko" +
+                            " ON payment.emp_id = monimo_dioikitiko.perm_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if(rs.next()) {
+                        ret = rs.getDouble("max_sal");
+                        System.out.println("max sal = "+ ret);
+                        return ret;
+                    }
+                }
+                else if(type_of_sal.equals("min")) {
+                    insQuery.append("SELECT MIN(payment.amount) AS min_sal FROM payment INNER JOIN monimo_dioikitiko" +
+                            " ON payment.emp_id = monimo_dioikitiko.perm_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if (rs.next()) {
+                        ret = rs.getDouble("min_sal");
+                        System.out.println("min sal = " + ret);
+                        return ret;
+                    }
+                }
+                else {
+                    insQuery.append("SELECT AVG(payment.amount) AS avg_sal FROM payment INNER JOIN monimo_dioikitiko" +
+                            " ON payment.emp_id = monimo_dioikitiko.perm_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if(rs.next()) {
+                        ret = rs.getDouble("avg_sal");
+                        System.out.println("avg sal = "+ ret);
+                        return ret;
+                    }
+                }
+            }
+            if(type_of_emp.equals("monimo_didaktiko")) {
+                if (type_of_sal.equals("max")) {
+                    insQuery.append("SELECT MAX(payment.amount) AS max_sal FROM payment INNER JOIN monimo_didaktiko" +
+                            " ON payment.emp_id = monimo_didaktiko.perm_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if (rs.next()) {
+                        ret = rs.getDouble("max_sal");
+                        System.out.println("max sal = " + ret);
+                        return ret;
+                    }
+                } else if (type_of_sal.equals("min")) {
+                    insQuery.append("SELECT MIN(payment.amount) AS min_sal FROM payment INNER JOIN monimo_didaktiko" +
+                            " ON payment.emp_id = monimo_didaktiko.perm_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if (rs.next()) {
+                        ret = rs.getDouble("min_sal");
+                        System.out.println("min sal = " + ret);
+                        return ret;
+                    }
+                } else {
+                    insQuery.append("SELECT AVG(payment.amount) AS avg_sal FROM payment INNER JOIN monimo_didaktiko" +
+                            " ON payment.emp_id = monimo_didaktiko.perm_id;");
+                    PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
+                    stmtIns.executeQuery();
+                    ResultSet rs = stmtIns.getResultSet();
+                    if (rs.next()) {
+                        ret = rs.getDouble("avg_sal");
+                        System.out.println("avg sal = " + ret);
+                        return ret;
+                    }
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            DB_Connection.closeDBConnection(stmt, con);
+        }
+        return ret;
     }
 }

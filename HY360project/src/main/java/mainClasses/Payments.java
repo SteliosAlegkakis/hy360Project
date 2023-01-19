@@ -5,7 +5,7 @@ public class Payments {
     double amount, family_allowance, research_allowance, lib_allowance;
     String date,employee_category;
 
-    public Payments( int emp_id, String employee_category, double amount, double family_allowance, double research_allowance, double lib_allowance, String date) {
+    public Payments(int emp_id, String employee_category, double amount, double family_allowance, double research_allowance, double lib_allowance, String date) {
         this.emp_id = emp_id;
         this.employee_category = employee_category;
         this.date = date;
