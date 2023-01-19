@@ -1,5 +1,6 @@
 package database;
 
+import com.google.gson.Gson;
 import javafx.animation.PauseTransition;
 import mainClasses.Payments;
 import mainClasses.Symvasiouxo_didaktiko;
@@ -334,5 +335,40 @@ public class EditPaymentsTable {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static ArrayList<Payments> getPaymentsFromID(int id) throws SQLException {
+        ArrayList<Payments> payments = new ArrayList<>();
+
+        Statement stmt = null;
+        PreparedStatement stmtIns;
+        Connection con = null;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM payment WHERE payment.emp_id = " + id + ";");
+            stmt.executeQuery(insQuery.toString());
+            ResultSet res = stmt.getResultSet();
+            while (res.next()) {
+                Payments p = new Payments();
+                p.setEmpId(res.getInt("emp_id"));
+                p.setEmployeeCategory(res.getString("employee_category"));
+                p.setAmount(res.getDouble("amount"));
+                p.setFamily_allowance(res.getDouble("family_allowance"));
+                p.setResearch_allowance(res.getDouble("research_allowance"));
+                p.setLib_allowance(res.getDouble("lib_allowance"));
+                p.setDate(res.getString("date"));
+                payments.add(p);
+            }
+            for(int i = 0;i<payments.size();i++){
+                System.out.println(payments.get(i));
+            }
+            return payments;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
