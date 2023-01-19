@@ -1,9 +1,27 @@
 package mainClasses;
 
+import java.util.Date;
+
 public class Ypallilos {
     int emp_ID,children_num;
     String name,address,phone,start_date,IBAN,bank,category,dept,marital_status,children_ages;
 
+    public Ypallilos() { };
+
+    public Ypallilos(int children_num, String name, String address, String phone, String start_date, String IBAN, String bank, String category, String dept, String marital_status, String children_ages) {
+//        this.emp_ID = emp_ID;
+        this.children_num = children_num;
+        this.address = address;
+        this.name = name;
+        this.phone = phone;
+        this.start_date = start_date;
+        this.IBAN = IBAN;
+        this.bank = bank;
+        this.category = category;
+        this.dept = dept;
+        this.marital_status = marital_status;
+        this.children_ages = children_ages;
+    }
     public void setEmp_ID(int emp_ID){this.emp_ID=emp_ID;}
     public void setName(String name){this.name=name;}
     public void setAddress(String address){this.address=address;}
