@@ -28,7 +28,7 @@ public class MyServlet extends HttpServlet {
         if(request_type.equals("change_salaries")) changeSalaries();
         else if(request_type.equals("hire")) {hire(request,response);}
         else if(request_type.equals("contract")) contract(request,response);
-        else if(request_type.equals("update_employee")) updateEmployee(request,response);
+        else if(request_type.equals("update")) updateEmployee(request,response);
         else if(request_type.equals("fire")) fire(request,response);
         else if(request_type.equals("payroll")) payroll();
         else {
@@ -100,7 +100,58 @@ public class MyServlet extends HttpServlet {
 
     private void updateEmployee(HttpServletRequest request, HttpServletResponse response){
         System.out.println("update");
-        //TODO updateEmployee()
+
+        try {
+            Ypallilos ypallilos = EditYpallilosTable.jsonToObject(EditYpallilosTable.databaseToJSON(request.getParameter("name")));
+
+            if(request.getParameter("address")!=null) ypallilos.setAddress(request.getParameter("address"));
+            if(request.getParameter("phone")!=null) ypallilos.setPhone(request.getParameter("phone"));
+            if(request.getParameter("dept")!=null) ypallilos.setDept(request.getParameter("dept"));
+            if(request.getParameter("IBAN")!=null) ypallilos.setBank(request.getParameter("IBAN"));
+            if(request.getParameter("bank")!=null) ypallilos.setIBAN(request.getParameter("bank"));
+            if(request.getParameter("marital_status")!=null) ypallilos.setMaritalStatus(request.getParameter("marital_status"));
+            if(request.getParameter("children_num")!=null) ypallilos.setChildrenNum(Integer.parseInt(request.getParameter("children_num")));
+            if(request.getParameter("children_ages")!=null) ypallilos.setChildrenAges(request.getParameter("children_ages"));
+
+            String category = ypallilos.getCategory();
+            int emp_id = ypallilos.getEmpID();
+
+            if(category.equals("monimo_didaktiko")) {
+                EditMonimoDidaktikoTable.delete(emp_id);
+                Monimo_didaktiko md = new Monimo_didaktiko(emp_id, ypallilos.getStartDate(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),ypallilos.getMaritalStatus());
+                EditMonimoDidaktikoTable.createNewDatabaseEntry(md);
+                EditYpallilosTable.update(ypallilos);
+                response.setStatus(200);
+            }
+            else if(category.equals("monimo_dioikitiko")){
+                EditMonimoDioikitikoTable.delete(emp_id);
+                Monimo_dioikitiko md = new Monimo_dioikitiko(emp_id, ypallilos.getStartDate(),ypallilos.getChildrenNum(), ypallilos.getChildrenAges(),ypallilos.getMaritalStatus());
+                EditMonimoDioikitikoTable.createNewDatabaseEntry(md);
+                EditYpallilosTable.update(ypallilos);
+                response.setStatus(200);
+            }
+            else if(category.equals("symvasiouxo_didaktiko")){
+                Symvasiouxo_didaktiko old = EditSymvasiouxoDidaktikoTable.jsonToObject(EditSymvasiouxoDidaktikoTable.databaseToJSON(emp_id));
+                EditSymvasiouxoDidaktikoTable.delete(emp_id);
+                Symvasiouxo_didaktiko sd = new Symvasiouxo_didaktiko(emp_id, old.getSalary(), ypallilos.getMaritalStatus(), ypallilos.getChildrenNum(), ypallilos.getChildrenAges(), old.getExpDate());
+                EditSymvasiouxoDidaktikoTable.createNewDatabaseEntry(sd);
+                EditYpallilosTable.update(ypallilos);
+                response.setStatus(200);
+            }
+            else if(category.equals("symvasiouxo_dioikitiko")){
+                Symvasiouxo_dioikitiko old = EditSymvasiouxoDioikitikoTable.jsonToObject(EditSymvasiouxoDioikitikoTable.databaseToJSON(emp_id));
+                EditSymvasiouxoDioikitikoTable.delete(emp_id);
+                Symvasiouxo_dioikitiko sd = new Symvasiouxo_dioikitiko(emp_id, old.getSalary(), ypallilos.getMaritalStatus(), ypallilos.getChildrenNum(), ypallilos.getChildrenAges(), old.getExpDate());
+                EditSymvasiouxoDioikitikoTable.createNewDatabaseEntry(sd);
+                EditYpallilosTable.update(ypallilos);
+                response.setStatus(200);
+            }
+            else response.setStatus(500);
+
+        } catch (SQLException e) {
+            System.err.println("SQLException at updateEmployee()");
+            response.setStatus(500);
+        }
     }
 
     private void changeSalaries(){
