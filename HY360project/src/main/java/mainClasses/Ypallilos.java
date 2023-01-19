@@ -8,7 +8,7 @@ public class Ypallilos {
 
     public Ypallilos() { };
 
-    public Ypallilos(int children_num, String name, String address, String phone, String start_date, String IBAN, String bank, String category, String dept, String marital_status, String children_ages) {
+    public Ypallilos( String name, String address, String phone, String start_date, String IBAN, String bank, String category, String dept, String marital_status,int children_num, String children_ages) {
 //        this.emp_ID = emp_ID;
         this.children_num = children_num;
         this.address = address;

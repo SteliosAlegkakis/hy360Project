@@ -77,7 +77,7 @@ public class EditPaymentsTable {
                 stmtIns.executeQuery();
                 rs = stmtIns.getResultSet();
                 while (rs.next()) {
-                    singleinfo = new Payments(rs.getInt("payment_id"), rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, 0, rs.getString("date"));
+                    singleinfo = new Payments(rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, 0, rs.getString("date"));
                     info.add(singleinfo);
                 }
             }
@@ -87,7 +87,7 @@ public class EditPaymentsTable {
                 stmtIns.executeQuery();
                 rs = stmtIns.getResultSet();
                 while (rs.next()) {
-                    singleinfo = new Payments(rs.getInt("payment_id"), rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), rs.getDouble("research_allowance"), 0, rs.getString("date"));
+                    singleinfo = new Payments( rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), rs.getDouble("research_allowance"), 0, rs.getString("date"));
                     info.add(singleinfo);
                 }
             }
@@ -97,7 +97,7 @@ public class EditPaymentsTable {
                 stmtIns.executeQuery();
                 rs = stmtIns.getResultSet();
                 while (rs.next()) {
-                    singleinfo = new Payments(rs.getInt("payment_id"), rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, rs.getDouble("lib_allowance"), rs.getString("date"));
+                    singleinfo = new Payments( rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, rs.getDouble("lib_allowance"), rs.getString("date"));
                     info.add(singleinfo);
                 }
             }
@@ -107,7 +107,7 @@ public class EditPaymentsTable {
                 stmtIns.executeQuery();
                 rs = stmtIns.getResultSet();
                 while (rs.next()) {
-                    singleinfo = new Payments(rs.getInt("payment_id"), rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, 0, rs.getString("date"));
+                    singleinfo = new Payments( rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, 0, rs.getString("date"));
                     info.add(singleinfo);
                 }
             }

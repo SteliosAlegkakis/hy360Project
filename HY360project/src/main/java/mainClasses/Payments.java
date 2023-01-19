@@ -5,12 +5,14 @@ public class Payments {
     double amount, family_allowance, research_allowance, lib_allowance;
     String date,employee_category;
 
-    public Payments(int bill_id, int emp_id, String date, double amount, double family_allowance) {
-        this.bill_id = bill_id;
+    public Payments( int emp_id, String employee_category, double amount, double family_allowance, double research_allowance, double lib_allowance, String date) {
         this.emp_id = emp_id;
+        this.employee_category = employee_category;
         this.date = date;
         this.amount = amount;
         this.family_allowance = family_allowance;
+        this.research_allowance = research_allowance;
+        this.lib_allowance = lib_allowance;
     }
 
     public void setBillId(int bill_id){this.bill_id=bill_id;}
@@ -30,5 +32,19 @@ public class Payments {
     public double getFamily_allowance() {return family_allowance; }
     public double getLib_allowance() {return lib_allowance; }
     public double getResearch_allowance() {return research_allowance;}
+
+    @Override
+    public String toString() {
+        return "Payments{" +
+                "bill_id=" + bill_id +
+                ", emp_id=" + emp_id +
+                ", amount=" + amount +
+                ", family_allowance=" + family_allowance +
+                ", research_allowance=" + research_allowance +
+                ", lib_allowance=" + lib_allowance +
+                ", date='" + date + '\'' +
+                ", employee_category='" + employee_category + '\'' +
+                '}';
+    }
 }
 
