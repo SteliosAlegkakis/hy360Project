@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import mainClasses.Ypallilos;
 import database.DB_Connection;
 import java.sql.*;
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 public class EditYpallilosTable {
@@ -119,6 +120,43 @@ public class EditYpallilosTable {
         } finally {
             DB_Connection.closeDBConnection(stmt, con);
         }
+    }
+
+    public static ArrayList<Ypallilos> getEmployees() throws SQLException {
+        Statement stmt = null;
+        Connection con = null;
+        ArrayList<Ypallilos> emps = new ArrayList<>();
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * from ypallilos;");
+            stmt.executeQuery(insQuery.toString());
+
+            ResultSet res = stmt.getResultSet();
+            while (res.next()) {
+                Ypallilos emp = new Ypallilos();
+                emp.setName(res.getString("name"));
+                emp.setAddress(res.getString("address"));
+                emp.setPhone(res.getString("phone"));
+                emp.setStartDate(res.getString("start_date"));
+                emp.setIBAN(res.getString("IBAN"));
+                emp.setBank(res.getString("bank"));
+                emp.setCategory(res.getString("category"));
+                emp.setDept(res.getString("dept"));
+                emp.setMaritalStatus(res.getString("marital_status"));
+                emp.setChildrenNum(res.getInt("children_num"));
+                emp.setChildrenAges(res.getString("children_ages"));
+                emps.add(emp);
+            }
+            return emps;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            DB_Connection.closeDBConnection(stmt,con);
+        }
+        return null;
     }
 
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong

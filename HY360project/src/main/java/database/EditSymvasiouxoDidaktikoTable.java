@@ -34,7 +34,7 @@ public class EditSymvasiouxoDidaktikoTable {
                     + ")";
 
             stmt.executeUpdate(insertQuery);
-            System.out.println("#Ypallilos was successfully added in the database.");
+            System.out.println("#symvasiouxo didaktiko proswpiko was successfully added in the database.");
             stmt.close();
 
         }
