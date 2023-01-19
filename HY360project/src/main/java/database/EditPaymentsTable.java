@@ -1,6 +1,5 @@
 package database;
 
-import javafx.animation.PauseTransition;
 import mainClasses.Payments;
 import mainClasses.Symvasiouxo_didaktiko;
 import mainClasses.Ypallilos;
@@ -77,6 +76,7 @@ public class EditPaymentsTable {
                 rs = stmtIns.getResultSet();
                 while (rs.next()) {
                     singleinfo = new Payments(rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, 0, rs.getString("date"));
+                    singleinfo.setPayment_id(rs.getInt("payment_id"));
                     info.add(singleinfo);
                 }
             }
@@ -87,6 +87,7 @@ public class EditPaymentsTable {
                 rs = stmtIns.getResultSet();
                 while (rs.next()) {
                     singleinfo = new Payments( rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), rs.getDouble("research_allowance"), 0, rs.getString("date"));
+                    singleinfo.setPayment_id(rs.getInt("payment_id"));
                     info.add(singleinfo);
                 }
             }
@@ -97,6 +98,7 @@ public class EditPaymentsTable {
                 rs = stmtIns.getResultSet();
                 while (rs.next()) {
                     singleinfo = new Payments( rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, rs.getDouble("lib_allowance"), rs.getString("date"));
+                    singleinfo.setPayment_id(rs.getInt("payment_id"));
                     info.add(singleinfo);
                 }
             }
@@ -107,6 +109,7 @@ public class EditPaymentsTable {
                 rs = stmtIns.getResultSet();
                 while (rs.next()) {
                     singleinfo = new Payments( rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, 0, rs.getString("date"));
+                    singleinfo.setPayment_id(rs.getInt("payment_id"));
                     info.add(singleinfo);
                 }
             }
