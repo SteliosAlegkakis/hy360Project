@@ -6,6 +6,7 @@ import mainClasses.Monimo_dioikitiko;
 import database.DB_Connection;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class EditMonimoDioikitikoTable {
     public static Monimo_dioikitiko jsonToObject(String json) {
@@ -15,7 +16,7 @@ public class EditMonimoDioikitikoTable {
     }
 
     /* The SQLException should be handled by the servlet to inform the front end that something went wrong
-    * */
+     * */
     public static void createNewDatabaseEntry(Monimo_dioikitiko monimo_dioikitiko) throws SQLException {
         try {
             Connection con = DB_Connection.getConnection();
@@ -106,5 +107,26 @@ public class EditMonimoDioikitikoTable {
         } finally {
             DB_Connection.closeDBConnection(stmt, con);
         }
+    }
+
+    public static ArrayList<Monimo_dioikitiko> getAllEntrys(){
+        try {
+            Connection con = DB_Connection.getConnection();
+            Statement stmt = con.createStatement();
+            ArrayList<Monimo_dioikitiko> md = new ArrayList<Monimo_dioikitiko>();
+            ResultSet rs;
+            rs = stmt.executeQuery("SELECT * FROM monimo_dioikitiko");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Monimo_dioikitiko monimo_dioikitiko = gson.fromJson(json, Monimo_dioikitiko.class);
+                md.add(monimo_dioikitiko);
+            }
+            return md;
+
+        } catch (Exception e) {
+            System.err.println("Exception in getAllEntrys()");
+        }
+        return null;
     }
 }

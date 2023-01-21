@@ -139,6 +139,21 @@ public class EditYpallilosTable {
         return null;
     }
 
+    public static String databaseToJSONEmpId(int emp_id) throws SQLException {
+
+        ResultSet rs;
+        try {
+            Connection con = DB_Connection.getConnection();
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM ypallilos WHERE emp_ID = '" + emp_id + "'");
+            rs.next();
+            String json=DB_Connection.getResultsToJSON(rs);
+            return json;
+        }
+        catch (ClassNotFoundException e) {System.err.println("ClassNotFoundException in databaseYpallilosToJSON");}
+        return null;
+    }
+
     public static ArrayList<Ypallilos> getEmployees() throws SQLException {
         try {
             Connection con = DB_Connection.getConnection();

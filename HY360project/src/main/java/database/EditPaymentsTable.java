@@ -1,7 +1,5 @@
 package database;
 
-import com.google.gson.Gson;
-import javafx.animation.PauseTransition;
 import mainClasses.Payments;
 import mainClasses.Symvasiouxo_didaktiko;
 import mainClasses.Ypallilos;
@@ -72,18 +70,18 @@ public class EditPaymentsTable {
             StringBuilder insQuery = new StringBuilder();
 
             if(type.equals("monimo_dioikitiko")) {
-                insQuery.append("SELECT payment.payment_id, ypallilos.emp_ID, payment.employee_category, payment.amount, monimo_dioikitiko.family_allowance, payment.date FROM monimo_dioikitiko, ypallilos, payment WHERE ypallilos.emp_ID = payment.emp_id AND ypallilos.emp_ID = monimo_dioikitiko.perm_id;");
+                insQuery.append("SELECT payment.payment_id, ypallilos.emp_ID, payment.employee_category, payment.amount, payment.family_allowance, payment.date FROM monimo_dioikitiko, ypallilos, payment WHERE ypallilos.emp_ID = payment.emp_id AND ypallilos.emp_ID = monimo_dioikitiko.perm_id;");
                 stmtIns = con.prepareStatement(insQuery.toString());
                 stmtIns.executeQuery();
                 rs = stmtIns.getResultSet();
                 while (rs.next()) {
-                    singleinfo = new Payments( rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, 0, rs.getString("date"));
+                    singleinfo = new Payments(rs.getInt("emp_id"), rs.getString("employee_category"), rs.getDouble("amount"), rs.getDouble("family_allowance"), 0, 0, rs.getString("date"));
                     singleinfo.setPayment_id(rs.getInt("payment_id"));
                     info.add(singleinfo);
                 }
             }
             else if(type.equals("monimo_didaktiko")) {
-                insQuery.append("SELECT payment.payment_id, ypallilos.emp_ID, payment.employee_category, payment.amount, monimo_didaktiko.family_allowance, monimo_didaktiko.research_allowance, payment.date FROM monimo_didaktiko, ypallilos, payment WHERE ypallilos.emp_ID = payment.emp_id AND ypallilos.emp_ID = monimo_didaktiko.perm_id;");
+                insQuery.append("SELECT payment.payment_id, ypallilos.emp_ID, payment.employee_category, payment.amount, payment.family_allowance, payment.research_allowance, payment.date FROM monimo_didaktiko, ypallilos, payment WHERE ypallilos.emp_ID = payment.emp_id AND ypallilos.emp_ID = monimo_didaktiko.perm_id;");
                 stmtIns = con.prepareStatement(insQuery.toString());
                 stmtIns.executeQuery();
                 rs = stmtIns.getResultSet();
@@ -94,7 +92,7 @@ public class EditPaymentsTable {
                 }
             }
             else if(type.equals("symvasiouxo_didaktiko")) {
-                insQuery.append("SELECT payment.payment_id, ypallilos.emp_ID, payment.employee_category, payment.amount, symvasiouxo_didaktiko.family_allowance, symvasiouxo_didaktiko.lib_allowance, payment.date FROM symvasiouxo_didaktiko, ypallilos, payment WHERE ypallilos.emp_ID = payment.emp_id AND ypallilos.emp_ID = symvasiouxo_didaktiko.temp_id;");
+                insQuery.append("SELECT payment.payment_id, ypallilos.emp_ID, payment.employee_category, payment.amount, payment.family_allowance, payment.lib_allowance, payment.date FROM symvasiouxo_didaktiko, ypallilos, payment WHERE ypallilos.emp_ID = payment.emp_id AND ypallilos.emp_ID = symvasiouxo_didaktiko.temp_id;");
                 stmtIns = con.prepareStatement(insQuery.toString());
                 stmtIns.executeQuery();
                 rs = stmtIns.getResultSet();
@@ -103,10 +101,9 @@ public class EditPaymentsTable {
                     singleinfo.setPayment_id(rs.getInt("payment_id"));
                     info.add(singleinfo);
                 }
-
             }
             else if(type.equals("symvasiouxo_dioikitiko")) {
-                insQuery.append("SELECT payment.payment_id, ypallilos.emp_ID, payment.employee_category, payment.amount, symvasiouxo_dioikitiko.family_allowance, payment.date FROM symvasiouxo_dioikitiko, ypallilos, payment WHERE ypallilos.emp_ID = payment.emp_id AND ypallilos.emp_ID = symvasiouxo_dioikitiko.temp_id;");
+                insQuery.append("SELECT payment.payment_id, ypallilos.emp_ID, payment.employee_category, payment.amount, payment.family_allowance, payment.date FROM symvasiouxo_dioikitiko, ypallilos, payment WHERE ypallilos.emp_ID = payment.emp_id AND ypallilos.emp_ID = symvasiouxo_dioikitiko.temp_id;");
                 stmtIns = con.prepareStatement(insQuery.toString());
                 stmtIns.executeQuery();
                 rs = stmtIns.getResultSet();
@@ -294,48 +291,6 @@ public class EditPaymentsTable {
         }
         return ret;
     }
-    public static double calculateSumOfSal(String type_of_emp) throws SQLException {
-        Statement stmt = null;
-        Connection con = null;
-        try {
-            con = DB_Connection.getConnection();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        double arr = 0;
-        StringBuilder insQuery = new StringBuilder();
-        PreparedStatement stmtIns;
-        ResultSet rs;
-
-        try {
-            con = DB_Connection.getConnection();
-            stmt = con.createStatement();
-
-            if(type_of_emp.equals("monimo_dioikitiko")) {
-                insQuery.append("SELECT SUM(amount + payment.family_allowance) AS amount FROM payment JOIN monimo_dioikitiko ON monimo_dioikitiko.perm_id = payment.emp_id;");
-            }
-            else if(type_of_emp.equals("monimo_didaktiko")) {
-                insQuery.append("SELECT SUM(amount + payment.family_allowance + payment.research_allowance) as amount FROM payment JOIN monimo_didaktiko ON payment.emp_id = monimo_didaktiko.perm_id;");
-            }
-            else if(type_of_emp.equals("symvasiouxo_dioikitiko")) {
-                insQuery.append("SELECT SUM(amount + payment.family_allowance) as amount FROM payment JOIN symvasiouxo_dioikitiko ON payment.emp_id = symvasiouxo_dioikitiko.temp_id;");
-            }
-            else {
-                insQuery.append("SELECT SUM(amount + payment.family_allowance + payment.lib_allowance) as amount FROM payment JOIN symvasiouxo_didaktiko ON payment.emp_id = symvasiouxo_didaktiko.temp_id;");
-            }
-            stmtIns = con.prepareStatement(insQuery.toString());
-            stmtIns.executeQuery();
-            rs = stmtIns.getResultSet();
-            while(rs.next()){
-                arr += rs.getDouble("amount");
-            }
-            System.out.println(arr);
-            return arr;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
     public static ArrayList<Payments> getPaymentsFromID(int id) throws SQLException {
         ArrayList<Payments> payments = new ArrayList<>();
@@ -353,6 +308,7 @@ public class EditPaymentsTable {
             ResultSet res = stmt.getResultSet();
             while (res.next()) {
                 Payments p = new Payments();
+                p.setPayment_id(res.getInt("payment_id"));
                 p.setEmpId(res.getInt("emp_id"));
                 p.setEmployeeCategory(res.getString("employee_category"));
                 p.setAmount(res.getDouble("amount"));

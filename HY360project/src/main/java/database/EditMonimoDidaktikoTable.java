@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import mainClasses.Monimo_didaktiko;
 import database.DB_Connection;
 import mainClasses.Symvasiouxo_didaktiko;
+import mainClasses.Ypallilos;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class EditMonimoDidaktikoTable {
 
@@ -107,5 +109,26 @@ public class EditMonimoDidaktikoTable {
         } finally {
             DB_Connection.closeDBConnection(stmt, con);
         }
+    }
+
+    public static ArrayList<Monimo_didaktiko> getAllEntrys(){
+        try {
+            Connection con = DB_Connection.getConnection();
+            Statement stmt = con.createStatement();
+            ArrayList<Monimo_didaktiko> md = new ArrayList<Monimo_didaktiko>();
+            ResultSet rs;
+            rs = stmt.executeQuery("SELECT * FROM monimo_didaktiko");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Monimo_didaktiko monimo_didaktiko = gson.fromJson(json, Monimo_didaktiko.class);
+                md.add(monimo_didaktiko);
+            }
+            return md;
+
+        } catch (Exception e) {
+            System.err.println("Exception in getAllEntrys()");
+        }
+        return null;
     }
 }

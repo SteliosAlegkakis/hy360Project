@@ -1,11 +1,13 @@
 package database;
 
 import com.google.gson.Gson;
+import mainClasses.Monimo_didaktiko;
 import mainClasses.Symvasiouxo_didaktiko;
 import mainClasses.Ypallilos;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class EditSymvasiouxoDidaktikoTable {
 
@@ -113,5 +115,26 @@ public class EditSymvasiouxoDidaktikoTable {
         } finally {
             DB_Connection.closeDBConnection(stmt, con);
         }
+    }
+
+    public static ArrayList<Symvasiouxo_didaktiko> getAllEntrys(){
+        try {
+            Connection con = DB_Connection.getConnection();
+            Statement stmt = con.createStatement();
+            ArrayList<Symvasiouxo_didaktiko> sd = new ArrayList<Symvasiouxo_didaktiko>();
+            ResultSet rs;
+            rs = stmt.executeQuery("SELECT * FROM symvasiouxo_didaktiko");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Symvasiouxo_didaktiko symvasiouxo_didaktiko = gson.fromJson(json, Symvasiouxo_didaktiko.class);
+                sd.add(symvasiouxo_didaktiko);
+            }
+            return sd;
+
+        } catch (Exception e) {
+            System.err.println("Exception in getAllEntrys()");
+        }
+        return null;
     }
 }

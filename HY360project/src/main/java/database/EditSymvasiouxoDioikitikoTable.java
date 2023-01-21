@@ -6,6 +6,7 @@ import mainClasses.Symvasiouxo_dioikitiko;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class EditSymvasiouxoDioikitikoTable {
     public static Symvasiouxo_dioikitiko jsonToObject(String json) {
@@ -108,6 +109,27 @@ public class EditSymvasiouxoDioikitikoTable {
         } finally {
             DB_Connection.closeDBConnection(stmt, con);
         }
+    }
+
+    public static ArrayList<Symvasiouxo_dioikitiko> getAllEntrys(){
+        try {
+            Connection con = DB_Connection.getConnection();
+            Statement stmt = con.createStatement();
+            ArrayList<Symvasiouxo_dioikitiko> sd = new ArrayList<Symvasiouxo_dioikitiko>();
+            ResultSet rs;
+            rs = stmt.executeQuery("SELECT * FROM symvasiouxo_dioikitiko");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Symvasiouxo_dioikitiko symvasiouxo_dioikitiko = gson.fromJson(json, Symvasiouxo_dioikitiko.class);
+                sd.add(symvasiouxo_dioikitiko);
+            }
+            return sd;
+
+        } catch (Exception e) {
+            System.err.println("Exception in getAllEntrys()");
+        }
+        return null;
     }
 }
 

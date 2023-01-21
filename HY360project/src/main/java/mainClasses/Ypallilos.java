@@ -8,7 +8,7 @@ public class Ypallilos {
 
     public Ypallilos() { };
 
-    public Ypallilos( String name, String address, String phone, String start_date, String IBAN, String bank, String category, String dept, String marital_status,int children_num, String children_ages) {
+    public Ypallilos(int children_num, String name, String address, String phone, String start_date, String IBAN, String bank, String category, String dept, String marital_status, String children_ages) {
 //        this.emp_ID = emp_ID;
         this.children_num = children_num;
         this.address = address;
@@ -22,6 +22,24 @@ public class Ypallilos {
         this.marital_status = marital_status;
         this.children_ages = children_ages;
     }
+
+    public String toHTMLString(){
+        String string="<br><h3>Στοιχεία Υπαλλήλου</h3><br>";
+        string+="<br>Όνομα : "+this.name+
+                "<br>Κωδικός : "+this.emp_ID+
+                "<br>Διεύθυνση : "+this.address+
+                "<br>Τηλέφωνο : "+this.phone+
+                "<br>Κατηγορία : "+this.category+
+                "<br>Τμήμα : "+this.dept+
+                "<br>Ημερομηνία Έναρξης : "+this.start_date+
+                "<br>Τράπεζα : "+this.bank+
+                "<br>IBAN : "+this.IBAN+
+                "<br>Κατάσταση Γάμου : "+this.marital_status+
+                "<br>Αριθμός Παιδιών : "+this.children_num+
+                "<br>Ηλικίες Παιδιών : "+this.children_ages+"<br><br>";
+        return string;
+    }
+
     public void setEmp_ID(int emp_ID){this.emp_ID=emp_ID;}
     public void setName(String name){this.name=name;}
     public void setAddress(String address){this.address=address;}

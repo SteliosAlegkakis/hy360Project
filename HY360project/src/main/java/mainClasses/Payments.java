@@ -5,8 +5,6 @@ public class Payments {
     double amount, family_allowance, research_allowance, lib_allowance;
     String date,employee_category;
 
-    public Payments() {};
-
     public Payments(int emp_id, String employee_category, double amount, double family_allowance, double research_allowance, double lib_allowance, String date) {
         this.emp_id = emp_id;
         this.employee_category = employee_category;
@@ -16,6 +14,8 @@ public class Payments {
         this.research_allowance = research_allowance;
         this.lib_allowance = lib_allowance;
     }
+
+    public Payments() {};
 
     public void setPayment_id(int payment_id){this.payment_id=payment_id;}
     public void setAmount(double amount){this.amount=amount;}
@@ -35,6 +35,16 @@ public class Payments {
     public double getLib_allowance() {return lib_allowance; }
     public double getResearch_allowance() {return research_allowance;}
 
+    public String toHTMLString() {
+        return "Κωδικός Πληρωμής : " + payment_id +
+                ", Κωδικός Υπαλλύλου : " + emp_id +
+                ", Μισθός : " + amount +
+                ", Οικιγενειακό επίδωμα : " + family_allowance +"<br>"+
+                "Επίδωμα έρευνας : " + research_allowance +
+                ", Επίδωμα βιβλιοθήκης : " + lib_allowance +
+                ", Ημερομηνία : " + date ;
+    }
+
     @Override
     public String toString() {
         return "Payments{" +
@@ -49,4 +59,3 @@ public class Payments {
                 '}';
     }
 }
-
