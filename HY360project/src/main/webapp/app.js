@@ -5,6 +5,8 @@ function viewMenu(){
 }
 
 function viewForm(form_name){
+    let status_messages = document.getElementsByClassName("status_message");
+    for(let i=0; i<status_messages.length; i++) status_messages[i].style.display = 'none';
     let form = document.getElementById(form_name);
     document.getElementById(form_name+"_success").style.display = 'none';
     document.getElementById(form_name+"_fail").style.display = 'none';
@@ -39,13 +41,36 @@ function server_request(form_name,method,request){
     xml_request.onload = function (){
         if(xml_request.readyState === 4 && xml_request.status === 200) {
             document.getElementById(form_name + "_success").style.display = 'flex';
+            document.getElementById(form_name + "_fail").style.display = 'none';
             document.getElementById(form_name).style.display = 'none';
         }
         else if(xml_request.status != 200) {
             document.getElementById(form_name + "_fail").style.display = 'block';
+            document.getElementById(form_name + "_success").style.display = 'none';
         }
     }
     xml_request.open(method, 'MyServlet?'+data);
+    xml_request.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+    xml_request.send(data);
+}
+
+function server_GET(form_name,request){
+    let data = $("#"+form_name).serialize()+"&request="+request;
+    console.log(data);
+    let xml_request = new XMLHttpRequest();
+    xml_request.onload = function (){
+        if(xml_request.readyState === 4 && xml_request.status === 200) {
+            document.getElementById(form_name + "_success").style.display = 'flex';
+            document.getElementById(form_name + "_fail").style.display = 'none';
+            document.getElementById(form_name+"_success").innerHTML = xml_request.responseText;
+            console.log(xml_request.responseText);
+        }
+        else if(xml_request.status != 200) {
+            document.getElementById(form_name + "_fail").style.display = 'block';
+            document.getElementById(form_name + "_success").style.display = 'none';
+        }
+    }
+    xml_request.open('GET', 'MyServlet?'+data);
     xml_request.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     xml_request.send(data);
 }

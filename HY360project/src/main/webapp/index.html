@@ -22,7 +22,15 @@
             <h4 class="menu_item" onclick="viewForm('change_salaries')">Μεταβολή Μισθών/Επιδωμάτων</h4>
             <h4 class="menu_item" onclick="viewForm('fire_retire')">Απόλυση/Συνταξιοδώτηση</h4>
             <h4 class="menu_item" onclick="viewForm('payroll')">Καταβολή Μισθοδοσίας</h4>
-            <h4 class="menu_item" onclick="viewForm('queries')">Ερωτήσεις</h4>
+            <h4 class="menu_item" onclick="viewElement('questions',this,'Ερωτήσεις')">Ερωτήσεις ˅</h4>
+            <div id="questions" class="column" style="display: none">
+                <h4 class="menu_item" onclick="viewForm('statistics')">Στατιστικά Μισθοδοσίας</h4>
+                <h4 class="menu_item" onclick="viewForm('category')">Κατάσταση Μισθοδοσίας ανα Κατηγορία</h4>
+                <h4 class="menu_item" onclick="viewForm('employee')">Στοιχεία και Μισθοδοσόια Υπαλλήλου</h4>
+                <h4 class="menu_item" onclick="viewForm('total')">Συνολικό Ύψος Μισθοδοσίας</h4>
+                <h4 class="menu_item" onclick="viewForm('avg_increase')">Μέση Άυξηση Μισθών/Επιδωμάτων</h4>
+                <h4 class="menu_item" onclick="viewForm('queries')">Ερωτήσεις προς τη Βάση</h4>
+            </div>
         </div>
         <div id="forms" onsubmit="return false">
             <form id="hire" style="display: none;">
@@ -74,10 +82,10 @@
                     <input type="text" name="children_num" placeholder="Αριθμός Παιδιών">
                     <input type="text" name="children_ages" placeholder="Ηλικίες Παιδίων">
                 </div>
-                <h3 id="hire_fail" class="fail_message" style="color: red">Η αίτηση απορίφθηκε. Ελέγξετε ξανά την φόρμα.</h3>
+                <h3 id="hire_fail" class="status_message" style="color: red">Η αίτηση απορίφθηκε. Ελέγξετε ξανά την φόρμα.</h3>
                 <button class="submit" onclick="server_request('hire','POST','hire')">Υποβολή</button>
             </form>
-            <div id="hire_success" class="success_message" style="display: none">
+            <div id="hire_success" class="status_message" style="display: none">
                 <h2 style="color: green">Υποβλήθηκε με επιτυχία</h2>
             </div>
 
@@ -137,29 +145,26 @@
                     <input type="text" name="children_num" placeholder="Αριθμός Παιδιών">
                     <input type="text" name="children_ages" placeholder="Ηλικίες Παιδίων">
                 </div>
-                <h3 id="contract_fail" class="fail_message" style="color: red">Η αίτηση απορίφθηκε. Ελέγξετε ξανά την φόρμα.</h3>
+                <h3 id="contract_fail" class="status_message" style="color: red">Η αίτηση απορίφθηκε. Ελέγξετε ξανά την φόρμα.</h3>
                 <button class="submit" onclick="server_request('contract','POST','contract')">Υποβολή</button>
             </form>
-            <div id="contract_success" class="success_message" style="display: none">
+            <div id="contract_success" class="status_message" style="display: none">
                 <h2 style="color: green">Υποβλήθηκε με επιτυχία</h2>
             </div>
     
             <form id="update" style="display: none;">
-                <h2>Αλλαγή Στοιχείων Υπαλλήλων</h2>
+                <h2>Αλλαγή Στοιχείων Υπαλλήλου</h2>
                 <div class="row">
                     <input type="text" name="name" placeholder="Όνομα">
                     <input type="text" name="address" placeholder="Διεύθυνση">
                 </div>
                 <div class="row">
                     <input type="text" name="phone" placeholder="Τηλέφωνο">
-                    <input type="date" name="start_date" placeholder="Ημερομηνία">
+                    <input type="text" name="dept" placeholder="Τμήμα Εργασίας">
                 </div>
                 <div class="row">
                     <input type="text" name="IBAN" placeholder="IBAN">
                     <input type="text" name="bank" placeholder="Όνομα Τράπεζας">
-                </div>
-                <div class="row">
-                    <input type="text" name="department" placeholder="Τμήμα Εργασίας">
                 </div>
                 <div class="radio">
                     <h4 class="radio-title button" onclick="viewElement('update_marriage',this,'Κατάσταση Γάμου')">Κατάσταση Γαμου ˅</h4>
@@ -176,50 +181,188 @@
                     </div>
                 </div>
                 <div class="row">
-                    <input type="text" placeholder="Αριθμός Παιδιών">
-                    <input type="text" placeholder="Ηλικίες Παιδιών">
+                    <input type="text" name="children_num" placeholder="Αριθμός Παιδιών">
+                    <input type="text" name="children_ages" placeholder="Ηλικίες Παιδιών">
                 </div>
-                <button class="submit">Υποβολή</button>
+                <h3 id="update_fail" class="status_message" style="color: red">Η αίτηση απορίφθηκε. Ελέγξετε ξανά την φόρμα.</h3>
+                <button class="submit" onclick="server_request('update','POST','update')">Υποβολή</button>
             </form>
+            <div id="update_success" class="status_message" style="display: none">
+                <h2 style="color: green">Υποβλήθηκε με επιτυχία</h2>
+            </div>
 
             <form id="change_salaries" style="display: none" onsubmit="return false">
+                <h2>Μεταβολή Μισθών/Επιδωμάτων</h2>
                <div class="radio">
-                   <h4 class="radio-title button" onclick="viewElement('emploee_type',this,'Κατηγορία Υπαλλήλων')">Κατηγορία Υπαλλήλων ˅</h4>
-                   <div class="radio-input" id="emploee_type" style="display: none">
+                   <h4 class="radio-title button" onclick="viewElement('monimo_didaktiko',this,'Μόνιμο Διδακτικό Πρωσοπικό')">Μόνιμο Διδακτικό Προσωπικό ˅</h4>
+                   <div class="radio-input" id="monimo_didaktiko" style="display: none">
                        <div class="radio-element">
-                           <label>Μόνιμο Διοικιτικό Προσωπικό</label>
-                           <input type="checkbox" name="per_1" value="monimo_dioikitiko_proswpiko">
+                           <label>Μισθός</label>
+                           <input type="checkbox" name="m_didaktiko_salary" value="checked">
                        </div>
                        <div class="radio-element">
-                           <label>Μόνιμο Διδακτικό Προσωπικό</label>
-                           <input type="checkbox" name="per_2" value="monimo_didaktiko proswpiko">
+                           <label>Οικογενειακό Επίδομα</label>
+                           <input type="checkbox" name="m_didaktiko_family" value="checked">
                        </div>
                        <div class="radio-element">
-                           <label>Συμβασιούχο Διδακτικό Προσωπικό</label>
-                           <input type="checkbox" name="simv_1" value="symvasioyxo_didaktiko proswpiko">
+                           <label>Επίδομα Έρευνας</label>
+                           <input type="checkbox" name="research" value="checked">
                        </div>
-                       <div class="radio-element">
-                           <label>Συμβασιούχο Διδακτικό Προσωπικό</label>
-                           <input type="checkbox" name="simv_2" value="symvasioyxo_didaktiko proswpiko">
-                       </div>
-                   </div>
-
-                   <h4 class="radio-title button" onclick="viewElement('salary_allowance',this,'Μισθοί/επιδώματα')">Μισθοί/Επιδώματα ˅</h4>
-                   <div class="radio-input" id="salary_allowance" style="display: none">
-                        <div class="radio-element">
-                            <label>Μισθοί</label>
-                            <input type="checkbox" name="misthoi" value="misthos">
-                        </div>
-                        <div class="radio-element">
-                           <label>Επιδώματα</label>
-                            <input type="checkbox" name="epidoma" value="epidoma">
-                        </div>
                    </div>
                </div>
 
-                <input type="text" name="amount" placeholder="Ποσό Άυξησης">
+                <div class="radio">
+                   <h4 class="radio-title button" onclick="viewElement('monimo_dioikitiko',this,'Μόνιμο Διοικιτικό Προσωπικό')">Μόνιμο Διοικιτικό Προσωπικό ˅</h4>
+                   <div class="radio-input" id="monimo_dioikitiko" style="display: none">
+                        <div class="radio-element">
+                            <label>Μισθός</label>
+                            <input type="checkbox" name="m_dioikitiko_salary" value="checked">
+                        </div>
+                        <div class="radio-element">
+                           <label>Οικογενειακό Επίδομα</label>
+                            <input type="checkbox" name="m_dioikitiko_family" value="checked">
+                        </div>
+                   </div>
+                </div>
 
-                <button class="submit">Υποβολή</button>
+                <div class="radio">
+                    <h4 class="radio-title button" onclick="viewElement('symvasiouxo_didaktiko',this,'Συμβασιούχο Διδακτικό Πρωσοπικό')">Συμβασιούχο Διδακτικό Προσωπικό ˅</h4>
+                    <div class="radio-input" id="symvasiouxo_didaktiko" style="display: none">
+                        <div class="radio-element">
+                            <label>Μισθός</label>
+                            <input type="checkbox" name="s_didaktiko_salary" value="checked">
+                        </div>
+                        <div class="radio-element">
+                            <label>Οικογενειακό Επίδομα</label>
+                            <input type="checkbox" name="s_didaktiko_family" value="checked">
+                        </div>
+                        <div class="radio-element">
+                            <label>Επίδομα Βιβλιοθήκης</label>
+                            <input type="checkbox" name="library" value="checked">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="radio">
+                    <h4 class="radio-title button" onclick="viewElement('symvasiouxo_dioikitiko',this,'Συμβασιούχο Διοικιτικό Προσωπικό')">Συμβασιούχο Διοικιτικό Προσωπικό ˅</h4>
+                    <div class="radio-input" id="symvasiouxo_dioikitiko" style="display: none">
+                        <div class="radio-element">
+                            <label>Μισθός</label>
+                            <input type="checkbox" name="s_dioikitiko_salary" value="checked">
+                        </div>
+                        <div class="radio-element">
+                            <label>Οικογενειακό Επίδομα</label>
+                            <input type="checkbox" name="s_dioikitiko_family" value="checked">
+                        </div>
+                    </div>
+                </div>
+
+                <input type="text" name="amount" placeholder="Ποσό Άυξησης">
+                <h3 id="change_salaries_fail" class="status_message" style="color: red;display: none">Το αίτημα απέτυχε.</h3>
+                <button class="submit" onclick="server_request('change_salaries','POST','change_salaries')">Υποβολή</button>
+            </form>
+            <h3 id="change_salaries_success" class="status_message" style="color:green;display: none">Υποβλήθηκε με επιτυχία.</h3>
+
+            <form id="fire_retire" onsubmit="return false" style="display: none">
+                <h2>Απόλυση-Συνταξιοδότηση</h2>
+                <div class="row">
+                    <input type="text" name="name" placeholder="Όνομα Υπαλλήλου">
+                    <input type="text" name="emp_id" placeholder="Κωδικός Υπαλλήλου">
+                </div>
+                <h3 id="fire_retire_fail" class="status_message" style="color: red;display: none">Η αίτηση απορίφθηκε. Ελέγξετε ξανά την φόρμα.</h3>
+                <button class="submit"onclick="server_request('fire_retire','POST','fire')">Υποβολή</button>
+            </form>
+            <div id="fire_retire_success" class="status_message" style="display: none">
+                <h2 style="color: green">Υποβλήθηκε με επιτυχία</h2>
+            </div>
+
+            <form id="payroll" onsubmit="return false" style="display: none">
+                <h2>Καταβολή Μισθοδοσίας</h2>
+
+                <div class="row">
+                    <label>Ημερομηνία</label>
+                    <input type="date" name="date" required>
+                </div>
+                <p id="payroll_success" class="status_message" style="display: none"></p>
+                <h3 id="payroll_fail" class="status_message" style="display: none;color: red">Το αίτημα απέτυχε</h3>
+                <button class="submit" onclick="server_GET('payroll','payroll')">Καταβολή</button>
+
+            </form>
+
+            <form id="statistics" onsubmit="return false" style="display:none;">
+                <h3>Προβολή μέγιστου, ελάχιστου και μέσου μισθού ανα κατηγορία προσωπικού.</h3>
+                <p id="statistics_success" class="status_message" style="display: none"></p>
+                <h3 id="statistics_fail" class="status_message" style="display: none">Το αίτημα απέτυχε.</h3>
+                <button class="submit" onclick="server_GET('statistics','get_statistics')">Προβολή</button>
+            </form>
+
+            <form id="category" style="display: none">
+                <h3>Kατάσταση μισθοδοσίας ανα κατηγορία προσωπικού.</h3>
+                <div class="radio">
+                    <h4 class="radio-title button" onclick="viewElement('category_staff_category',this,'Κατηγορία Προσωπικού')">Κατηγορία Προσωπικού ˅</h4>
+                    <div class="radio-input" id="category_staff_category" style="display: none">
+                        <div class="radio-element">
+                            <label>Μόνιμο Διδακτικό Προσωπικό</label>
+                            <input type="radio" name="category" value="monimo_didaktiko" required>
+                        </div>
+
+                        <div class="radio-element">
+                            <label>Μόνιμο Διοικιτικό Προσωπικό</label>
+                            <input type="radio" name="category" value="monimo_dioikitiko" required>
+                        </div>
+
+                        <div class="radio-element">
+                            <label>Συμβασιούχο Διδακτικό Προσωπικό</label>
+                            <input type="radio" name="category" value="symvasiouxo_didaktiko" required>
+                        </div>
+
+                        <div class="radio-element">
+                            <label>Συμβασιούχο Διοικιτικό Προσωπικό</label>
+                            <input type="radio" name="category" value="symvasiouxo_dioikitiko" required>
+                        </div>
+                    </div>
+                </div>
+                <p id="category_success" class="status_message" style="display: none"></p>
+                <h3 id="category_fail" class="status_message" style="display: none">Το αίτημα απέτυχε.</h3>
+                <button class="submit" onclick="server_GET('category','get_category')">Προβολή</button>
+            </form>
+
+            <form id="employee" style="display: none">
+                <h3>Στοιχεία Και Μισθοδοσία Υπαλλήλου</h3>
+                <div class="row">
+                    <input type="text" name="name" placeholder="Όνομα Υπαλλήλου">
+                </div>
+                <div id="employee_success" class="status_message column" style="display: none;"></div>
+                <h3 id="employee_fail" class="status_message" style="display: none;color: red">Το αίτημα απέτυχε.</h3>
+                <button class="submit" onclick="server_GET('employee','get_employee')">Υποβολή</button>
+            </form>
+
+            <form id="avg_increase" style="display:none;">
+                <h3>Μέση Άυξηση Μισθών/Επιδωμάτων ανα Χρονική Περίοδο</h3>
+                <div class="row">
+                    <label>Από</label>
+                    <input type="date" name="st_date">
+                    <label>Έως</label>
+                    <input type="date" name="fin_date">
+                </div>
+                <div id="avg_increase_success" class="status_message column" style="display: none;"></div>
+                <h3 id="avg_increase_fail" class="status_message" style="display: none;color: red">Το αίτημα απέτυχε.</h3>
+                <button class="submit" onclick="server_GET('avg_increase','avg_increase')">Υποβολή</button>
+            </form>
+
+            <form id="total" style="display: none">
+                <h3>Συνολικό Ύψος Μισθοδοσίας ανα Κατηγορία Προσωπικού</h3>
+                <div id="total_success" class="status_message column" style="display: none;"></div>
+                <h3 id="total_fail" class="status_message" style="display: none;color: red">Το αίτημα απέτυχε.</h3>
+                <button class="submit" onclick="server_GET('total','total')">Προβολή</button>
+            </form>
+
+            <form id="queries" style="display:none;">
+                <h3>Ερωτήσεις προς τη βάση</h3>
+                <input type="text" name="query" placeholder="SQL query">
+                <p id="queries_success" class="status_message"></p>
+                <h3 id="queries_fail" class="status_message" style="color: red">Το αίτημα απέτυχε</h3>
+                <button class="submit" onclick="server_GET('queries','query')">Υποβολή</button>
             </form>
 
         </div>
