@@ -1,12 +1,16 @@
 package database;
 
 import mainClasses.Payments;
-import mainClasses.Symvasiouxo_didaktiko;
 import mainClasses.Ypallilos;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class EditPaymentsTable {
     public static void createTable() throws SQLException, ClassNotFoundException {
@@ -326,5 +330,87 @@ public class EditPaymentsTable {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static double FindAverageIncrease(String st_date, String fin_date) throws SQLException {
+        HashMap<Integer, ArrayList<Integer>> id_amount = new HashMap<>();
+        HashMap<Integer, ArrayList<Date>> id_date = new HashMap<>();
+        HashMap<Integer, Integer> diff = new HashMap<>();
+        Statement stmt;
+        Connection con;
+        try {
+            con = DB_Connection.getConnection();
+            stmt = con.createStatement();
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM payment"+ ";");
+            stmt.executeQuery(insQuery.toString());
+            ResultSet res = stmt.getResultSet();
+            SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d1 = sdformat.parse(fin_date);
+            Date d2 = sdformat.parse(st_date);
+
+            while (res.next()) {
+
+                Date d3 = sdformat.parse(res.getDate("date").toString());
+                int i3 = res.getInt("amount")+res.getInt("family_allowance")+res.getInt("research_allowance")+res.getInt("lib_allowance");
+                if(d1.compareTo(d3)>0 && d2.compareTo(d3)<0){
+                    int empid = res.getInt("emp_id");
+
+                    if(!id_amount.containsKey(empid)) {
+                        id_amount.put(empid,new ArrayList<Integer>());
+                        id_date.put(empid,new ArrayList<Date>());
+
+                        id_amount.get(empid).add(res.getInt("amount")+res.getInt("family_allowance")+res.getInt("research_allowance")+res.getInt("lib_allowance"));
+                        id_date.get(empid).add(d3);
+                    }
+                    else {
+                        if(id_date.get(empid).get(0).compareTo(d3) < 0){
+                            if(id_date.get(empid).size() <= 1) {
+                                id_date.get(empid).add(d3);
+                                id_amount.get(empid).add(i3);
+                            }
+                            else if(id_date.get(empid).get(1).compareTo(d3) < 0) {
+                                id_date.get(empid).remove(0);
+                                id_date.get(empid).add(d3);
+                                id_amount.get(empid).remove(0);
+                                id_amount.get(empid).add(i3);
+                            }
+                            else {
+                                id_date.get(empid).remove(0);
+                                id_date.get(empid).add(0,d3);
+                                id_amount.get(empid).remove(0);
+                                id_amount.get(empid).add(0,i3);
+                            }
+                        }
+                        else if(id_date.get(empid).size() == 1) {
+                            id_date.get(empid).add(0,d3);
+                            id_amount.get(empid).add(0,i3);
+                        }
+
+                    }
+                }
+            }
+
+            double avg = 0.0;
+
+            for (Map.Entry<Integer, ArrayList<Integer>> e : id_amount.entrySet()) {
+                ArrayList<Integer> value  = e.getValue();
+
+                if(value.size() <= 1) {
+                    diff.put(e.getKey(),0);
+                }
+                else {
+                    diff.put(e.getKey(), value.get(1)-value.get(0));
+                    avg += diff.get(e.getKey());
+                }
+            }
+            avg = avg/id_amount.size();
+            return avg;
+
+        } catch (ClassNotFoundException | ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
