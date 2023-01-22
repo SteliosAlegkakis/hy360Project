@@ -332,7 +332,7 @@ public class EditPaymentsTable {
         return null;
     }
 
-    public static double FindAverageIncrease(String st_date, String fin_date) throws SQLException {
+    public static String FindAverageIncrease(String st_date, String fin_date) throws SQLException {
         HashMap<Integer, ArrayList<Integer>> id_amount = new HashMap<>();
         HashMap<Integer, ArrayList<Date>> id_date = new HashMap<>();
         HashMap<Integer, Integer> diff = new HashMap<>();
@@ -406,11 +406,11 @@ public class EditPaymentsTable {
                 }
             }
             avg = avg/id_amount.size();
-            return avg;
+            return String.valueOf(avg);
 
         } catch (ClassNotFoundException | ParseException e) {
             e.printStackTrace();
         }
-        return 0;
+        return null;
     }
 }
